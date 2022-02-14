@@ -1,0 +1,30 @@
+{
+  "name": "invoicebox/sdk",
+  "description": "Invoicebox sdk",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Invoicebox Develoeprs",
+      "email": "developer@invbox.ru"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "symfony/http-client": "^6.0",
+    "jms/serializer-bundle": "^4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Invoicebox\\Sdk\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Invoicebox\\Sdk\\Tests\\": "tests/"
+    }
+  }
+}
