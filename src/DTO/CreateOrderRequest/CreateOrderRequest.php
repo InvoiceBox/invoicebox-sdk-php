@@ -2,8 +2,6 @@
 
 namespace Invoicebox\Sdk\DTO\CreateOrderRequest;
 
-use JMS\Serializer\Annotation\Type;
-
 class CreateOrderRequest
 {
     private string $description;
@@ -15,7 +13,7 @@ class CreateOrderRequest
     private ?string $languageId = null;
     private \DateTimeInterface $expirationDate;
     /**
-     * @Type("array<Invoicebox\Sdk\DTO\CreateOrderCartItem>")
+     * @var array<CartItem>
      */
     private array $cartItems;
     private Customer $customer;
@@ -24,84 +22,27 @@ class CreateOrderRequest
     private ?string $failUrl = null;
     private ?string $returnUrl = null;
 
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): void
+    public function __construct(
+        string $description,
+        string $merchantId,
+        string $merchantOrderId,
+        float $amount,
+        float $vatAmount,
+        string $currencyId,
+        \DateTimeInterface $expirationDate,
+        array $cartItems,
+        Customer $customer
+    )
     {
         $this->description = $description;
-    }
-
-    public function getMerchantId(): string
-    {
-        return $this->merchantId;
-    }
-
-    public function setMerchantId(string $merchantId): void
-    {
         $this->merchantId = $merchantId;
-    }
-
-    public function getMerchantOrderId(): string
-    {
-        return $this->merchantOrderId;
-    }
-
-    public function setMerchantOrderId(string $merchantOrderId): void
-    {
         $this->merchantOrderId = $merchantOrderId;
-    }
-
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
-
-    public function setAmount(float $amount): void
-    {
         $this->amount = $amount;
-    }
-
-    public function getVatAmount(): float
-    {
-        return $this->vatAmount;
-    }
-
-    public function setVatAmount(float $vatAmount): void
-    {
         $this->vatAmount = $vatAmount;
-    }
-
-    public function getCurrencyId(): string
-    {
-        return $this->currencyId;
-    }
-
-    public function setCurrencyId(string $currencyId): void
-    {
         $this->currencyId = $currencyId;
-    }
-
-    public function getLanguageId(): ?string
-    {
-        return $this->languageId;
-    }
-
-    public function setLanguageId(?string $languageId): void
-    {
-        $this->languageId = $languageId;
-    }
-
-    public function getExpirationDate(): \DateTimeInterface
-    {
-        return $this->expirationDate;
-    }
-
-    public function setExpirationDate(\DateTimeInterface $expirationDate): void
-    {
         $this->expirationDate = $expirationDate;
+        $this->cartItems = $cartItems;
+        $this->customer = $customer;
     }
 
     /**
@@ -112,19 +53,49 @@ class CreateOrderRequest
         return $this->cartItems;
     }
 
-    public function setCartItems(array $cartItems): void
+    public function getDescription(): string
     {
-        $this->cartItems = $cartItems;
+        return $this->description;
     }
 
-    public function getCustomer()
+    public function getMerchantId(): string
+    {
+        return $this->merchantId;
+    }
+
+    public function getMerchantOrderId(): string
+    {
+        return $this->merchantOrderId;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function getVatAmount(): float
+    {
+        return $this->vatAmount;
+    }
+
+    public function getCurrencyId(): string
+    {
+        return $this->currencyId;
+    }
+
+    public function getLanguageId(): ?string
+    {
+        return $this->languageId;
+    }
+
+    public function getExpirationDate(): \DateTimeInterface
+    {
+        return $this->expirationDate;
+    }
+
+    public function getCustomer(): Customer
     {
         return $this->customer;
-    }
-
-    public function setCustomer($customer): void
-    {
-        $this->customer = $customer;
     }
 
     public function getNotificationUrl(): ?string
@@ -132,19 +103,9 @@ class CreateOrderRequest
         return $this->notificationUrl;
     }
 
-    public function setNotificationUrl(?string $notificationUrl): void
-    {
-        $this->notificationUrl = $notificationUrl;
-    }
-
     public function getSuccessUrl(): ?string
     {
         return $this->successUrl;
-    }
-
-    public function setSuccessUrl(?string $successUrl): void
-    {
-        $this->successUrl = $successUrl;
     }
 
     public function getFailUrl(): ?string
@@ -152,14 +113,29 @@ class CreateOrderRequest
         return $this->failUrl;
     }
 
-    public function setFailUrl(?string $failUrl): void
-    {
-        $this->failUrl = $failUrl;
-    }
-
     public function getReturnUrl(): ?string
     {
         return $this->returnUrl;
+    }
+
+    public function setLanguageId(?string $languageId): void
+    {
+        $this->languageId = $languageId;
+    }
+
+    public function setNotificationUrl(?string $notificationUrl): void
+    {
+        $this->notificationUrl = $notificationUrl;
+    }
+
+    public function setSuccessUrl(?string $successUrl): void
+    {
+        $this->successUrl = $successUrl;
+    }
+
+    public function setFailUrl(?string $failUrl): void
+    {
+        $this->failUrl = $failUrl;
     }
 
     public function setReturnUrl(?string $returnUrl): void
@@ -167,5 +143,33 @@ class CreateOrderRequest
         $this->returnUrl = $returnUrl;
     }
 
+    public function setMerchantId(string $merchantId): void
+    {
+        $this->merchantId = $merchantId;
+    }
 
+    public function toArray(): array
+    {
+        $cartItemsArray = [];
+        foreach ($this->cartItems as $cartItem) {
+            $cartItemsArray[] = $cartItem->toArray();
+        }
+
+        return [
+            $this->description,
+            $this->merchantId,
+            $this->merchantOrderId,
+            $this->amount,
+            $this->vatAmount,
+            $this->currencyId,
+            $this->languageId,
+            $this->expirationDate,
+            $cartItemsArray,
+            $this->customer->toArray(),
+            $this->notificationUrl,
+            $this->successUrl,
+            $this->failUrl,
+            $this->returnUrl
+        ];
+    }
 }

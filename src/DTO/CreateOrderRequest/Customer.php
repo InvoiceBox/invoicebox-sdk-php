@@ -11,14 +11,25 @@ class Customer
     private string $vatNumber;
     private string $registrationAddress;
 
+    public function __construct(
+        string $type,
+        string $name,
+        string $phone,
+        string $email,
+        string $vatNumber,
+        string $registrationAddress
+    ) {
+        $this->type = $type;
+        $this->name = $name;
+        $this->phone = $phone;
+        $this->email = $email;
+        $this->vatNumber = $vatNumber;
+        $this->registrationAddress = $registrationAddress;
+    }
+
     public function getType(): string
     {
         return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
     }
 
     public function getName(): string
@@ -26,19 +37,9 @@ class Customer
         return $this->name;
     }
 
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
     public function getPhone(): string
     {
         return $this->phone;
-    }
-
-    public function setPhone(string $phone): void
-    {
-        $this->phone = $phone;
     }
 
     public function getEmail(): string
@@ -46,19 +47,9 @@ class Customer
         return $this->email;
     }
 
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
     public function getVatNumber(): string
     {
         return $this->vatNumber;
-    }
-
-    public function setVatNumber(string $vatNumber): void
-    {
-        $this->vatNumber = $vatNumber;
     }
 
     public function getRegistrationAddress(): string
@@ -66,10 +57,15 @@ class Customer
         return $this->registrationAddress;
     }
 
-    public function setRegistrationAddress(string $registrationAddress): void
+    public function toArray(): array
     {
-        $this->registrationAddress = $registrationAddress;
+        return [
+            $this->type,
+            $this->name,
+            $this->phone,
+            $this->email,
+            $this->vatNumber,
+            $this->registrationAddress
+        ];
     }
-
-
 }
