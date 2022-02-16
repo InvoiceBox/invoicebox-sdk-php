@@ -5,7 +5,7 @@ namespace Invoicebox\Sdk\DTO\CreateOrderRequest;
 class CreateOrderRequest
 {
     private string $description;
-    private string $merchantId;
+    private ?string $merchantId;
     private string $merchantOrderId;
     private float $amount;
     private float $vatAmount;
@@ -13,7 +13,7 @@ class CreateOrderRequest
     private ?string $languageId = null;
     private \DateTimeInterface $expirationDate;
     /**
-     * @var array<CartItem>
+     * @var CartItem[]
      */
     private array $cartItems;
     private Customer $customer;
@@ -24,7 +24,6 @@ class CreateOrderRequest
 
     public function __construct(
         string $description,
-        string $merchantId,
         string $merchantOrderId,
         float $amount,
         float $vatAmount,
@@ -35,7 +34,6 @@ class CreateOrderRequest
     )
     {
         $this->description = $description;
-        $this->merchantId = $merchantId;
         $this->merchantOrderId = $merchantOrderId;
         $this->amount = $amount;
         $this->vatAmount = $vatAmount;
@@ -46,7 +44,7 @@ class CreateOrderRequest
     }
 
     /**
-     * @return array<CartItem>
+     * @return CartItem[]
      */
     public function getCartItems(): array
     {

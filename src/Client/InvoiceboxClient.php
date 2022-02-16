@@ -3,6 +3,8 @@
 namespace Invoicebox\Sdk\Client;
 
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
+use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponse;
+use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponseData;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -39,11 +41,7 @@ class InvoiceboxClient
             ]
         );
 
-        if (!$response->getStatusCode() >= 300) {
-            return $response->getContent();
-        }
-        //какое сообщение сюда передать?
-        throw new InvalidArgument();
+        return $response->getContent(false);
     }
 
     private function doGetRequest(string $url, array $query = [])
@@ -56,12 +54,7 @@ class InvoiceboxClient
             ]
         );
 
-        if (!$response->getStatusCode() >= 300) {
-            return $response->getContent();
-        }
-        //какое сообщение сюда передать?
-        throw new InvalidArgument();
-
+        return $response->getContent(false);
     }
 
     private function doPutRequest(string $url, string $jsonBody)
@@ -79,11 +72,7 @@ class InvoiceboxClient
             ]
         );
 
-        if (!$response->getStatusCode() >= 300) {
-            return $response->getContent();
-        }
-        //какое сообщение сюда передать?
-        throw new InvalidArgument();
+        return $response->getContent(false);
     }
 
     private function doDeleteRequest(string $url, array $query = [])
@@ -96,29 +85,26 @@ class InvoiceboxClient
             ]
         );
 
-        if (!$response->getStatusCode() >= 300) {
-            return $response->getContent();
-        }
-        //какое сообщение сюда передать?
-        throw new InvalidArgument();
+        return $response->getContent(false);
     }
 
-    public function createOrder(CreateOrderRequest $body, string $merchantId = ''): array
+    public function createOrder(CreateOrderRequest $createOrderRequest, string $merchantId = null): CreateOrderResponseData
     {
-        if ($merchantId !== '') {
-            $body->setMerchantId($merchantId);
+        if ($merchantId) {
+            $createOrderRequest->setMerchantId($merchantId);
         } elseif ($this->defaultMerchantId !== '') {
-            $body->setMerchantId($this->defaultMerchantId);
+            $createOrderRequest->setMerchantId($this->defaultMerchantId);
         } else {
             throw new InvalidArgument('Empty merchant id');
         }
 
-        $response = $this->doPostRequest('/v3/billing/api/order/order', json_encode($body->toArray()));
+        $response = $this->doPostRequest('/v3/billing/api/order/order', json_encode($createOrderRequest->toArray()));
 
-        $responseData = json_decode($response);
+        $responseData = new CreateOrderResponse();
+        $responseData->fromArray(json_decode($response));
 
-        if (isset($responseData['data'])) {
-            return $responseData['data'];
+        if ($responseData->getData() !== null) {
+            return $responseData->getData();
         }
 
         throw new InvalidArgument($responseData['resultMessage']);
