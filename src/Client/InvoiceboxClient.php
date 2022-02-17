@@ -101,7 +101,7 @@ class InvoiceboxClient
         $response = $this->doPostRequest('/v3/billing/api/order/order', json_encode($createOrderRequest->toArray()));
 
         $responseData = new CreateOrderResponse();
-        $responseData->fromArray(json_decode($response));
+        $responseData->fromArray(json_decode($response,true));
 
         if ($responseData->getData() !== null) {
             return $responseData->getData();
