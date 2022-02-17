@@ -11,7 +11,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class CreateInvoiceboxOrder extends TestCase
+class CreateInvoiceboxOrderTest extends TestCase
 {
     /**
      * @test
