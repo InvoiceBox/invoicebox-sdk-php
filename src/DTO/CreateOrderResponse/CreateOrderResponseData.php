@@ -2,6 +2,8 @@
 
 namespace Invoicebox\Sdk\DTO\CreateOrderResponse;
 
+use Invoicebox\Sdk\Exception\InvalidArgument;
+
 class CreateOrderResponseData
 {
     private string $id;
@@ -51,6 +53,7 @@ class CreateOrderResponseData
             $this->status = $responseData['status'];
             $this->orderContainerId = $responseData['orderContainerId'];
         } catch (\Exception $exception) {
+            throw new InvalidArgument('Not enough data');
         }
 
         return $this;

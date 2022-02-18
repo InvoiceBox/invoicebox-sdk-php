@@ -14,12 +14,12 @@ class InvoiceboxClient
 
     private HttpClientInterface $client;
     private string $authKey;
-    private string $defaultMerchantId;
+    private ?string $defaultMerchantId;
 
     public function __construct(
         HttpClientInterface $client,
         string $authKey,
-        string $defaultMerchantId = ''
+        ?string $defaultMerchantId = null
     ) {
         $this->client = $client;
         $this->authKey = $authKey;
@@ -92,7 +92,7 @@ class InvoiceboxClient
     {
         if ($merchantId) {
             $createOrderRequest->setMerchantId($merchantId);
-        } elseif ($this->defaultMerchantId !== '') {
+        } elseif ($this->defaultMerchantId !== null) {
             $createOrderRequest->setMerchantId($this->defaultMerchantId);
         } else {
             throw new InvalidArgument('Empty merchant id');
@@ -100,13 +100,12 @@ class InvoiceboxClient
 
         $response = $this->doPostRequest('/v3/billing/api/order/order', json_encode($createOrderRequest->toArray()));
 
-        $responseData = new CreateOrderResponse();
-        $responseData->fromArray(json_decode($response,true));
+        $responseData = new CreateOrderResponse(json_decode($response,true));
 
         if ($responseData->getData() !== null) {
             return $responseData->getData();
         }
 
-        throw new InvalidArgument($responseData['resultMessage']);
+        throw new InvalidArgument('Bad data for request');
     }
 }
