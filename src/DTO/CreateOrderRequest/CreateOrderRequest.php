@@ -16,12 +16,18 @@ class CreateOrderRequest
      * @var CartItem[]
      */
     private array $cartItems;
-    private Customer $customer;
+    /**
+     * @var LegalCustomer|PrivateCustomer
+     */
+    private $customer;
     private ?string $notificationUrl = null;
     private ?string $successUrl = null;
     private ?string $failUrl = null;
     private ?string $returnUrl = null;
 
+    /**
+     * @param LegalCustomer|PrivateCustomer $customer
+     */
     public function __construct(
         string $description,
         string $merchantOrderId,
@@ -30,7 +36,7 @@ class CreateOrderRequest
         string $currencyId,
         \DateTimeInterface $expirationDate,
         array $cartItems,
-        Customer $customer
+        $customer
     )
     {
         $this->description = $description;
@@ -91,7 +97,10 @@ class CreateOrderRequest
         return $this->expirationDate;
     }
 
-    public function getCustomer(): Customer
+    /**
+     * @return PrivateCustomer|LegalCustomer
+     */
+    public function getCustomer()
     {
         return $this->customer;
     }

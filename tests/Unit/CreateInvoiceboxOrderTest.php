@@ -5,7 +5,7 @@ namespace Invoicebox\Src\Tests\Unit;
 use Invoicebox\Sdk\Client\InvoiceboxClient;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CartItem;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
-use Invoicebox\Sdk\DTO\CreateOrderRequest\Customer;
+use Invoicebox\Sdk\DTO\CreateOrderRequest\LegalCustomer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -64,10 +64,9 @@ class CreateInvoiceboxOrderTest extends TestCase
         );
     }
 
-    private function setCustomer(): Customer
+    private function setCustomer(): LegalCustomer
     {
-        return new Customer(
-            'private',
+        return new LegalCustomer(
             'OOO TEST',
             '78121111111',
             'test@test.test',
