@@ -1,0 +1,46 @@
+{
+  "data": {
+    "id": "017f038f-c78b-736d-dc00-8bce30bd0f9f",
+    "description": "Проездной билет",
+    "currencyId": "RUB",
+    "amount": 2790.67,
+    "vatAmount": 0,
+    "basketItems": [
+      {
+        "sku": "0123456789",
+        "name": "Black Edition",
+        "measure": "шт",
+        "measureCode": "796",
+        "quantity": 1,
+        "amount": 2790.67,
+        "amountWoVat": 2790.67,
+        "totalAmount": 2790.67,
+        "totalVatAmount": 0,
+        "vatCode": "VATNONE",
+        "type": "commodity",
+        "paymentType": "full_prepayment"
+      }
+    ],
+    "orderContainerId": "017f038f-c751-e9e7-f580-d0685b4b74d9",
+    "merchantId": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+    "status": "created",
+    "subtype": "order",
+    "processingStatus": "",
+    "createdAt": "2022-02-16T17:23:48+00:00",
+    "merchantOrderId": "1",
+    "expirationDate": "2023-07-02T00:00:00+00:00",
+    "fileIds": [],
+    "paymentUrl": "https:\/\/payment.dev.invbox.ru\/order\/017f038f-c751-e9e7-f580-d0685b4b74d9",
+    "customer": {
+      "type": "private",
+      "name": "OOO TEST",
+      "phone": "78121111111",
+      "email": "test@test.test",
+      "vatNumber": "123321",
+      "registrationAddress": "123321, Колотушкина, 1, 1"
+    },
+    "languageId": "ru",
+    "processable": true
+  },
+  "extendedData": []
+}
