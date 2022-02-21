@@ -34,9 +34,7 @@ class CreateOrderRequest
         float $amount,
         float $vatAmount,
         string $currencyId,
-        \DateTimeInterface $expirationDate,
-        array $cartItems,
-        $customer
+        \DateTimeInterface $expirationDate
     )
     {
         $this->description = $description;
@@ -45,8 +43,6 @@ class CreateOrderRequest
         $this->vatAmount = $vatAmount;
         $this->currencyId = $currencyId;
         $this->expirationDate = $expirationDate;
-        $this->cartItems = $cartItems;
-        $this->customer = $customer;
     }
 
     /**
@@ -105,6 +101,14 @@ class CreateOrderRequest
         return $this->customer;
     }
 
+    /**
+     * @param PrivateCustomer|LegalCustomer $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
+    }
+
     public function getNotificationUrl(): ?string
     {
         return $this->notificationUrl;
@@ -153,6 +157,11 @@ class CreateOrderRequest
     public function setMerchantId(string $merchantId): void
     {
         $this->merchantId = $merchantId;
+    }
+
+    public function addCartItem(CartItem $cartItem)
+    {
+        $this->cartItems[] = $cartItem;
     }
 
     public function toArray(): array
