@@ -5,6 +5,7 @@ namespace Invoicebox\Sdk\Client;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponseData;
+use Invoicebox\Sdk\DTO\QueryBuilder\QueryBuilder;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Invoicebox\Sdk\Exception\SerializationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -111,29 +112,29 @@ class InvoiceboxClient
         } else {
             throw new InvalidArgument('Empty merchant id');
         }
-
-        $response = $this->doPostRequest('/v3/billing/api/order/order', json_encode($createOrderRequest->toArray()));
+        $requestJson = json_encode($createOrderRequest->toArray());
+        $response = $this->doPostRequest('/v3/billing/api/order/order',$requestJson);
 
         $responseData = new CreateOrderResponse($this->serialize($response));
 
-        if ($responseData->getData() !== null) {
-            return $responseData->getData();
-        }
+        return $responseData->getData();
 
-        throw new InvalidArgument('Bad data for request');
     }
 
     /**
      * @return CreateOrderResponseData[]
      */
-    public function getOrderByQuery(
-        array $query = []
-    ) {
-        $response = $this->doGetRequest('/v3/filter/api/order/order', $query);
+    public function getOrderByQuery(QueryBuilder $query = null) {
+        $response = $this->doGetRequest(
+            '/v3/filter/api/order/order',
+            $query->getQuery() ?? []
+        );
 
         $responseData = [];
 
-        foreach ($this->serialize($response)['data'] as $orderDataArray) {
+        $responseArray = $this->serialize($response);
+
+        foreach ($responseArray['data'] as $orderDataArray) {
             $orderData = new CreateOrderResponseData();
             $responseData[] = $orderData->fromArray($orderDataArray);
         }

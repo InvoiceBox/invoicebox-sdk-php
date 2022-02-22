@@ -14,6 +14,8 @@ class CreateOrderResponse
 
         if (isset($arrayData['data'])) {
             $this->data = $responseData->fromArray($arrayData['data']);
+        } else if (isset($arrayData['error'])) {
+            throw new InvalidArgument($arrayData['error']['message']);
         } else {
             throw new InvalidArgument('Not enough data');
         }

@@ -12,7 +12,7 @@ class GetInvoiceboxOrderTest extends TestCase
     /**
      * @test
      */
-    public function createInvoiceboxOrder()
+    public function getInvoiceboxOrder()
     {
         $mock = new MockHttpClient();
         $mock->setResponseFactory(
