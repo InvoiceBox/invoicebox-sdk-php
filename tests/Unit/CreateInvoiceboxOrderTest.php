@@ -3,6 +3,7 @@
 namespace Invoicebox\Sdk\Tests\Unit;
 
 use Invoicebox\Sdk\Client\InvoiceboxClient;
+use Invoicebox\Sdk\DTO\ApiConstants;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CartItem;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\LegalCustomer;
@@ -13,11 +14,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 class CreateInvoiceboxOrderTest extends TestCase
 {
-    public const VATNONE = 'VATNONE';
-    public const COMMODITY = 'commodity';
-    public const FULL_PREPAYMENT = 'full_prepayment';
-
-
     /**
      * @test
      */
@@ -52,9 +48,9 @@ class CreateInvoiceboxOrderTest extends TestCase
                 2790.67,
                 2790.67,
                 0.0,
-                self::VATNONE,
-                self::COMMODITY,
-                self::FULL_PREPAYMENT,
+                ApiConstants::VATNONE,
+                ApiConstants::COMMODITY,
+                ApiConstants::FULL_PREPAYMENT,
                 2790.67
             )
         );
@@ -108,9 +104,9 @@ class CreateInvoiceboxOrderTest extends TestCase
                     2790.67,
                     2790.67,
                     0.0,
-                    self::VATNONE,
-                    self::COMMODITY,
-                    self::FULL_PREPAYMENT,
+                    ApiConstants::VATNONE,
+                    ApiConstants::COMMODITY,
+                    ApiConstants::FULL_PREPAYMENT,
                     2790.67
                 )
             );
@@ -126,11 +122,10 @@ class CreateInvoiceboxOrderTest extends TestCase
 
             $mockClient->createOrder($request);
 
-            //an exception must be thrown
-            $this->fail();
+            $this->fail('an exception must be thrown');
         } catch (InvalidArgument $exception) {
             $this->assertNotNull($exception);
-            $this->assertEquals('Not enough data', $exception->getMessage());
+            $this->assertEquals('Calculation Error', $exception->getMessage());
         }
 
     }

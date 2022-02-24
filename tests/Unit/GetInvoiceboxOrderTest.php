@@ -3,6 +3,7 @@
 namespace Invoicebox\Sdk\Tests\Unit;
 
 use Invoicebox\Sdk\Client\InvoiceboxClient;
+use Invoicebox\Sdk\DTO\Filter\Filter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -25,7 +26,11 @@ class GetInvoiceboxOrderTest extends TestCase
             'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
 
-        $response = $mockClient->getOrderByQuery();
+        $filter = new Filter();
+        $filter->addEqual('merchantId',  'ffffffff-ffff-ffff-ffff-ffffffffffff');
+
+
+        $response = $mockClient->findOrderByFilter($filter);
 
         $this->assertNotNull($response);
         $this->assertEquals(2, count($response));

@@ -5,7 +5,7 @@ namespace Invoicebox\Sdk\Client;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponseData;
-use Invoicebox\Sdk\DTO\QueryBuilder\QueryBuilder;
+use Invoicebox\Sdk\DTO\Filter\Filter;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Invoicebox\Sdk\Exception\SerializationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -29,7 +29,7 @@ class InvoiceboxClient
         $this->defaultMerchantId = $defaultMerchantId;
     }
 
-    private function doPostRequest(string $url, string $jsonBody)
+    private function doPostRequest(string $url, array $jsonBody)
     {
         $response = $this->client->request(
             'POST',
@@ -40,7 +40,7 @@ class InvoiceboxClient
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ],
-                'body' => $jsonBody
+                'json' => $jsonBody
             ]
         );
 
@@ -112,22 +112,21 @@ class InvoiceboxClient
         } else {
             throw new InvalidArgument('Empty merchant id');
         }
-        $requestJson = json_encode($createOrderRequest->toArray());
-        $response = $this->doPostRequest('/v3/billing/api/order/order',$requestJson);
+
+        $response = $this->doPostRequest('/v3/billing/api/order/order',$createOrderRequest->toArray());
 
         $responseData = new CreateOrderResponse($this->serialize($response));
 
         return $responseData->getData();
-
     }
 
     /**
      * @return CreateOrderResponseData[]
      */
-    public function getOrderByQuery(QueryBuilder $query = null) {
+    public function findOrderByFilter(Filter $filter) {
         $response = $this->doGetRequest(
             '/v3/filter/api/order/order',
-            $query->getQuery() ?? []
+            $filter->getQuery() ?? []
         );
 
         $responseData = [];

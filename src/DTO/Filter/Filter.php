@@ -1,8 +1,8 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\QueryBuilder;
+namespace Invoicebox\Sdk\DTO\Filter;
 
-class QueryBuilder
+class Filter
 {
     private array $query;
 
@@ -13,7 +13,7 @@ class QueryBuilder
 
     public function addEqual(string $key, string $value): void
     {
-        $this->query[$key] = $value;
+        $this->query[$key][] = $value;
     }
 
     public function addInCondition(string $key, array $values): void
