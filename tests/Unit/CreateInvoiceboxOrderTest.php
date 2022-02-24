@@ -3,10 +3,12 @@
 namespace Invoicebox\Sdk\Tests\Unit;
 
 use Invoicebox\Sdk\Client\InvoiceboxClient;
-use Invoicebox\Sdk\DTO\ApiConstants;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CartItem;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\LegalCustomer;
+use Invoicebox\Sdk\DTO\Types\BasketItemType;
+use Invoicebox\Sdk\DTO\Types\PaymentType;
+use Invoicebox\Sdk\DTO\Types\VatCode;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -48,9 +50,9 @@ class CreateInvoiceboxOrderTest extends TestCase
                 2790.67,
                 2790.67,
                 0.0,
-                ApiConstants::VATNONE,
-                ApiConstants::COMMODITY,
-                ApiConstants::FULL_PREPAYMENT,
+                VatCode::VATNONE,
+                BasketItemType::COMMODITY,
+                PaymentType::FULL_PREPAYMENT,
                 2790.67
             )
         );
@@ -104,9 +106,9 @@ class CreateInvoiceboxOrderTest extends TestCase
                     2790.67,
                     2790.67,
                     0.0,
-                    ApiConstants::VATNONE,
-                    ApiConstants::COMMODITY,
-                    ApiConstants::FULL_PREPAYMENT,
+                    VatCode::VATNONE,
+                    BasketItemType::COMMODITY,
+                    PaymentType::FULL_PREPAYMENT,
                     2790.67
                 )
             );
