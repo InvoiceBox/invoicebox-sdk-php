@@ -66,7 +66,7 @@ class InvoiceboxClient
         return $response->getContent(false);
     }
 
-    private function doPutRequest(string $url, array $jsonBody)
+    private function doPutRequest(string $url, array $body)
     {
         $response = $this->client->request(
             'POST',
@@ -77,7 +77,7 @@ class InvoiceboxClient
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ],
-                'json' => $jsonBody
+                'json' => $body
             ]
         );
 
