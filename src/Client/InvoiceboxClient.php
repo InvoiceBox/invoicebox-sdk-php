@@ -29,7 +29,7 @@ class InvoiceboxClient
         $this->defaultMerchantId = $defaultMerchantId;
     }
 
-    private function doPostRequest(string $url, array $jsonBody)
+    private function doPostRequest(string $url, array $body)
     {
         $response = $this->client->request(
             'POST',
@@ -40,7 +40,7 @@ class InvoiceboxClient
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ],
-                'json' => $jsonBody
+                'json' => $body
             ]
         );
 
