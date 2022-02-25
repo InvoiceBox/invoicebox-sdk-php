@@ -133,6 +133,15 @@ class InvoiceboxClient
         return $responseData->getData();
     }
 
+    public function deleteOrder(string $uuid): CreateOrderResponseData
+    {
+        $response = $this->doDeleteRequest("/v3/billing/api/order/order/$uuid");
+
+        $responseData = new CreateOrderResponse($this->serialize($response));
+
+        return $responseData->getData();
+    }
+
     /**
      * @return CreateOrderResponseData[]
      */
