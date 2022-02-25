@@ -1,0 +1,13 @@
+{
+  "error": {
+    "message": "Calculation Error",
+    "code": "wrong_total_amount",
+    "fields": [
+      {
+        "name": "amount",
+        "code": "wrong_value",
+        "message": ""
+      }
+    ]
+  }
+}

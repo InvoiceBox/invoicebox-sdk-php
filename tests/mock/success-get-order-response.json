@@ -1,0 +1,107 @@
+{
+  "data": [
+    {
+      "id": "017f1b5a-b677-a228-2951-b3523dbbd836",
+      "description": "description",
+      "currencyId": "RUB",
+      "amount": 1239.6,
+      "vatAmount": 0,
+      "basketItems": [
+        {
+          "sku": "5fe0adcfa7fb4",
+          "name": "Бронирование номера",
+          "measure": "шт",
+          "measureCode": "796",
+          "grossWeight": 0,
+          "netWeight": 0,
+          "quantity": 1,
+          "amount": 1239.6,
+          "amountWoVat": 1239.6,
+          "totalAmount": 1239.6,
+          "totalVatAmount": 0,
+          "vatCode": "VATNONE",
+          "type": "service",
+          "paymentType": "full_payment"
+        }
+      ],
+      "orderContainerId": "017f1b5a-b663-c917-8d58-a813bef50ce9",
+      "merchantId": "ffffffff-ffff-ffff-ffff-fffffffffff5",
+      "status": "completed",
+      "subtype": "order",
+      "processingStatus": "",
+      "createdAt": "2022-02-21T08:16:44+00:00",
+      "merchantOrderId": "5656-123",
+      "expirationDate": "2022-09-01T09:01:01+00:00",
+      "fileIds": [],
+      "paymentUrl": "https:\/\/payment.stage.invbox.ru\/order\/017f1b5a-b663-c917-8d58-a813bef50ce9",
+      "paidAt": "2022-02-21T08:17:03+00:00",
+      "customer": {
+        "type": "legal",
+        "name": "ООО СТРИЖАП",
+        "phone": "78121111111",
+        "email": "example@example.com",
+        "vatNumber": "7810610046",
+        "registrationAddress": "street 12"
+      },
+      "languageId": "ru",
+      "processable": true,
+      "invoiceSetting": {
+        "customerLocked": true
+      }
+    },
+    {
+      "id": "017f0713-8238-0019-4772-f1cc6bab2e88",
+      "description": "Тестовый заказ через POSXML",
+      "currencyId": "RUB",
+      "amount": 110,
+      "vatAmount": 10,
+      "basketItems": [
+        {
+          "sku": "5fe0adcfa7fb4",
+          "name": "Бронирование номера",
+          "measure": "шт",
+          "measureCode": "796",
+          "originCountry": "Россия",
+          "originCountryCode": "643",
+          "quantity": 1,
+          "amount": 110,
+          "amountWoVat": 100,
+          "totalAmount": 110,
+          "totalVatAmount": 10,
+          "vatCode": "RUS_VAT10",
+          "type": "service",
+          "paymentType": "prepayment"
+        }
+      ],
+      "orderContainerId": "017f0713-81f7-b38d-d33e-574b93933da3",
+      "merchantId": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "status": "completed",
+      "subtype": "order",
+      "processingStatus": "",
+      "createdAt": "2022-02-17T09:46:33+00:00",
+      "merchantOrderId": "1000000014",
+      "expirationDate": "2022-02-18T09:40:00+00:00",
+      "fileIds": [],
+      "returnUrl": "https:\/\/google.ru\/",
+      "successUrl": "https:\/\/yandex.ru\/",
+      "paymentUrl": "https:\/\/payment.stage.invbox.ru\/order\/017f0713-81f7-b38d-d33e-574b93933da3",
+      "paidAt": "2022-02-17T10:10:42+00:00",
+      "customer": {
+        "type": "legal",
+        "name": "Тестов Тест Тестович",
+        "phone": "79991111111",
+        "email": "test@test.ru",
+        "vatNumber": "7710044140",
+        "registrationAddress": "Moscow"
+      },
+      "languageId": "ru",
+      "processable": true
+    }
+  ],
+  "metaData": {
+    "totalCount": 2,
+    "pageSize": 30,
+    "page": 1
+  },
+  "extendedData": []
+}

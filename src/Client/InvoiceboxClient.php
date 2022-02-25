@@ -5,7 +5,10 @@ namespace Invoicebox\Sdk\Client;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponseData;
+use Invoicebox\Sdk\DTO\Filter\Filter;
 use Invoicebox\Sdk\Exception\InvalidArgument;
+use Invoicebox\Sdk\Exception\SerializationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class InvoiceboxClient
@@ -26,7 +29,7 @@ class InvoiceboxClient
         $this->defaultMerchantId = $defaultMerchantId;
     }
 
-    private function doPostRequest(string $url, string $jsonBody)
+    private function doPostRequest(string $url, array $body)
     {
         $response = $this->client->request(
             'POST',
@@ -37,7 +40,7 @@ class InvoiceboxClient
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ],
-                'body' => $jsonBody,
+                'json' => $body
             ]
         );
 
@@ -50,6 +53,11 @@ class InvoiceboxClient
             'GET',
             self::BASE_URL . $url,
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->authKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ],
                 'query' => $query
             ]
         );
@@ -68,7 +76,7 @@ class InvoiceboxClient
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ],
-                'body' => $jsonBody,
+                'body' => $jsonBody
             ]
         );
 
@@ -78,9 +86,14 @@ class InvoiceboxClient
     private function doDeleteRequest(string $url, array $query = [])
     {
         $response = $this->client->request(
-            'GET',
+            'DELETE',
             self::BASE_URL . $url,
             [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->authKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ],
                 'query' => $query
             ]
         );
@@ -88,8 +101,10 @@ class InvoiceboxClient
         return $response->getContent(false);
     }
 
-    public function createOrder(CreateOrderRequest $createOrderRequest, string $merchantId = null): CreateOrderResponseData
-    {
+    public function createOrder(
+        CreateOrderRequest $createOrderRequest,
+        string $merchantId = null
+    ): CreateOrderResponseData {
         if ($merchantId) {
             $createOrderRequest->setMerchantId($merchantId);
         } elseif ($this->defaultMerchantId !== null) {
@@ -98,14 +113,40 @@ class InvoiceboxClient
             throw new InvalidArgument('Empty merchant id');
         }
 
-        $response = $this->doPostRequest('/v3/billing/api/order/order', json_encode($createOrderRequest->toArray()));
+        $response = $this->doPostRequest('/v3/billing/api/order/order',$createOrderRequest->toArray());
 
-        $responseData = new CreateOrderResponse(json_decode($response,true));
+        $responseData = new CreateOrderResponse($this->serialize($response));
 
-        if ($responseData->getData() !== null) {
-            return $responseData->getData();
+        return $responseData->getData();
+    }
+
+    /**
+     * @return CreateOrderResponseData[]
+     */
+    public function findOrderByFilter(Filter $filter) {
+        $response = $this->doGetRequest(
+            '/v3/filter/api/order/order',
+            $filter->getQuery() ?? []
+        );
+
+        $responseData = [];
+
+        $responseArray = $this->serialize($response);
+
+        foreach ($responseArray['data'] as $orderDataArray) {
+            $orderData = new CreateOrderResponseData();
+            $responseData[] = $orderData->fromArray($orderDataArray);
         }
 
-        throw new InvalidArgument('Bad data for request');
+        return $responseData;
+    }
+
+    private function serialize(string $data): array
+    {
+        try {
+            return json_decode($data, true);
+        } catch (\Exception $exception) {
+            throw new SerializationException();
+        }
     }
 }

@@ -1,11 +1,15 @@
 <?php
 
-namespace Invoicebox\Src\Tests\Unit;
+namespace Invoicebox\Sdk\Tests\Unit;
 
 use Invoicebox\Sdk\Client\InvoiceboxClient;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CartItem;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderRequest\LegalCustomer;
+use Invoicebox\Sdk\DTO\Types\BasketItemType;
+use Invoicebox\Sdk\DTO\Types\PaymentType;
+use Invoicebox\Sdk\DTO\Types\VatCode;
+use Invoicebox\Sdk\Exception\InvalidArgument;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -27,51 +31,104 @@ class CreateInvoiceboxOrderTest extends TestCase
             'b37c4c689295904ed21eee5d9a48d42e',
             'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
-        $response = $mockClient->createOrder(
-            new CreateOrderRequest(
-                'Проездной билет',
-                '1',
+
+        $request = new CreateOrderRequest(
+            'Проездной билет',
+            '1',
+            2790.67,
+            0.0,
+            'RUB',
+            new \DateTime('yesterday')
+        );
+        $request->addCartItem(
+            new CartItem(
+                '0123456789',
+                'Black Edition',
+                'шт.',
+                '796',
+                1.0,
+                2790.67,
                 2790.67,
                 0.0,
-                'RUB',
-                new \DateTime('yesterday'),
-                [
-                    $this->addCartItem()
-                ],
-                $this->setCustomer()
+                VatCode::VATNONE,
+                BasketItemType::COMMODITY,
+                PaymentType::FULL_PREPAYMENT,
+                2790.67
             )
         );
+        $request->setCustomer(
+            new LegalCustomer(
+                'OOO TEST',
+                '78121111111',
+                'test@test.test',
+                '123321',
+                '123321, Колотушкина, 1, 1'
+            )
+        );
+
+        $response = $mockClient->createOrder($request);
 
         $this->assertNotNull($response);
         $this->assertEquals( '017f038f-c78b-736d-dc00-8bce30bd0f9f', $response->getId());
     }
 
-    private function addCartItem(): CartItem
+    /**
+     * @test
+     */
+    public function createInvoiceboxOrderWrongAmount()
     {
-        return new CartItem(
-            '0123456789',
-            'Black Edition',
-            'шт.',
-            '796',
-            1.0,
-            2790.67,
-            2790.67,
-            0.0,
-            'VATNONE',
-            'commodity',
-            'full_prepayment',
-            2790.67
+        $mock = new MockHttpClient();
+        $mock->setResponseFactory(
+            new MockResponse(file_get_contents('./tests/mock/wrong-amount-response.json'))
         );
-    }
 
-    private function setCustomer(): LegalCustomer
-    {
-        return new LegalCustomer(
-            'OOO TEST',
-            '78121111111',
-            'test@test.test',
-            '123321',
-            '123321, Колотушкина, 1, 1'
+        $mockClient = new InvoiceboxClient(
+            $mock,
+            'b37c4c689295904ed21eee5d9a48d42e',
+            'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
+        try {
+            $request = new CreateOrderRequest(
+                'Проездной билет',
+                '1',
+                2790.67,
+                0.0,
+                'RUB',
+                new \DateTime('yesterday')
+            );
+            $request->addCartItem(
+                new CartItem(
+                    '0123456789',
+                    'Black Edition',
+                    'шт.',
+                    '796',
+                    1.0,
+                    2790.67,
+                    2790.67,
+                    0.0,
+                    VatCode::VATNONE,
+                    BasketItemType::COMMODITY,
+                    PaymentType::FULL_PREPAYMENT,
+                    2790.67
+                )
+            );
+            $request->setCustomer(
+                new LegalCustomer(
+                    'OOO TEST',
+                    '78121111111',
+                    'test@test.test',
+                    '123321',
+                    '123321, Колотушкина, 1, 1'
+                )
+            );
+
+            $mockClient->createOrder($request);
+
+            $this->fail('an exception must be thrown');
+        } catch (InvalidArgument $exception) {
+            $this->assertNotNull($exception);
+            $this->assertEquals('Calculation Error', $exception->getMessage());
+        }
+
     }
 }
