@@ -6,6 +6,7 @@ use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\CreateOrderResponse\CreateOrderResponseData;
 use Invoicebox\Sdk\DTO\Filter\Filter;
+use Invoicebox\Sdk\DTO\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Invoicebox\Sdk\Exception\SerializationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -65,7 +66,7 @@ class InvoiceboxClient
         return $response->getContent(false);
     }
 
-    private function doPutRequest(string $url, string $jsonBody)
+    private function doPutRequest(string $url, array $body)
     {
         $response = $this->client->request(
             'POST',
@@ -76,7 +77,7 @@ class InvoiceboxClient
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ],
-                'body' => $jsonBody
+                'json' => $body
             ]
         );
 
@@ -114,6 +115,18 @@ class InvoiceboxClient
         }
 
         $response = $this->doPostRequest('/v3/billing/api/order/order',$createOrderRequest->toArray());
+
+        $responseData = new CreateOrderResponse($this->serialize($response));
+
+        return $responseData->getData();
+    }
+
+    public function updateOrder(
+        string $uuid,
+        UpdateOrderRequest $updateOrderRequest
+    ): CreateOrderResponseData
+    {
+        $response = $this->doPutRequest("/v3/billing/api/order/order/$uuid", $updateOrderRequest->toArray());
 
         $responseData = new CreateOrderResponse($this->serialize($response));
 
