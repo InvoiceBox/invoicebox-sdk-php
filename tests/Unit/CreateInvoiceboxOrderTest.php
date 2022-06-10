@@ -28,6 +28,7 @@ class CreateInvoiceboxOrderTest extends TestCase
 
         $mockClient = new InvoiceboxClient(
             $mock,
+            '',
             'b37c4c689295904ed21eee5d9a48d42e',
             'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
@@ -84,6 +85,7 @@ class CreateInvoiceboxOrderTest extends TestCase
 
         $mockClient = new InvoiceboxClient(
             $mock,
+            '',
             'b37c4c689295904ed21eee5d9a48d42e',
             'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
@@ -127,7 +129,7 @@ class CreateInvoiceboxOrderTest extends TestCase
             $this->fail('an exception must be thrown');
         } catch (InvalidArgument $exception) {
             $this->assertNotNull($exception);
-            $this->assertEquals('Calculation Error', $exception->getMessage());
+            $this->assertEquals('wrong_total_amount', $exception->getMessage());
         }
 
     }

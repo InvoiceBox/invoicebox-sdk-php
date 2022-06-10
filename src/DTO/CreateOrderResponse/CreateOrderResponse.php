@@ -10,12 +10,10 @@ class CreateOrderResponse
 
     public function __construct(array $arrayData)
     {
-        $responseData = new CreateOrderResponseData();
-
         if (isset($arrayData['data'])) {
-            $this->data = $responseData->fromArray($arrayData['data']);
+            $this->data = CreateOrderResponseData::fromArray($arrayData['data']);
         } else if (isset($arrayData['error'])) {
-            throw new InvalidArgument($arrayData['error']['message']);
+            throw new InvalidArgument($arrayData['error']['code']);
         }
     }
 

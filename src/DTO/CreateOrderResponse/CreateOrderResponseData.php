@@ -43,19 +43,20 @@ class CreateOrderResponseData
         return $this->orderContainerId;
     }
 
-    public function fromArray(array $responseData): CreateOrderResponseData
+    public static function fromArray(array $responseData): CreateOrderResponseData
     {
+        $response = new self();
         try {
-            $this->id = $responseData['id'];
-            $this->paymentUrl = $responseData['paymentUrl'];
-            $this->description = $responseData['description'];
-            $this->createdAt = $responseData['createdAt'];
-            $this->status = $responseData['status'];
-            $this->orderContainerId = $responseData['orderContainerId'];
+            $response->id = $responseData['id'];
+            $response->paymentUrl = $responseData['paymentUrl'];
+            $response->description = $responseData['description'];
+            $response->createdAt = $responseData['createdAt'];
+            $response->status = $responseData['status'];
+            $response->orderContainerId = $responseData['orderContainerId'];
         } catch (\Exception $exception) {
             throw new InvalidArgument('Not enough data');
         }
 
-        return $this;
+        return $response;
     }
 }

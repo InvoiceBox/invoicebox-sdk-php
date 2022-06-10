@@ -14,18 +14,19 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class InvoiceboxClient
 {
-    private const BASE_URL = 'https://api.stage.invbox.ru/';
-
     private HttpClientInterface $client;
     private string $authKey;
+    private string $apiUrl;
     private ?string $defaultMerchantId;
 
     public function __construct(
         HttpClientInterface $client,
+        string $apiUrl,
         string $authKey,
         ?string $defaultMerchantId = null
     ) {
         $this->client = $client;
+        $this->apiUrl = $apiUrl;
         $this->authKey = $authKey;
         $this->defaultMerchantId = $defaultMerchantId;
     }
@@ -34,7 +35,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'POST',
-            self::BASE_URL . $url,
+            $this->apiUrl . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -52,7 +53,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'GET',
-            self::BASE_URL . $url,
+            $this->apiUrl . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -70,7 +71,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'POST',
-            self::BASE_URL . $url,
+            $this->apiUrl . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -88,7 +89,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'DELETE',
-            self::BASE_URL . $url,
+            $this->apiUrl . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -114,7 +115,7 @@ class InvoiceboxClient
             throw new InvalidArgument('Empty merchant id');
         }
 
-        $response = $this->doPostRequest('/v3/billing/api/order/order',$createOrderRequest->toArray());
+        $response = $this->doPostRequest('/v3/billing/api/order/order', $createOrderRequest->toArray());
 
         $responseData = new CreateOrderResponse($this->serialize($response));
 
@@ -156,8 +157,7 @@ class InvoiceboxClient
         $responseArray = $this->serialize($response);
 
         foreach ($responseArray['data'] as $orderDataArray) {
-            $orderData = new CreateOrderResponseData();
-            $responseData[] = $orderData->fromArray($orderDataArray);
+            $responseData[] = CreateOrderResponseData::fromArray($orderDataArray);
         }
 
         return $responseData;
