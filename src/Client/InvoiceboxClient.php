@@ -8,23 +8,32 @@ use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\InvalidArgument;
+use Symfony\Component\HttpClient\Exception\JsonException;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class InvoiceboxClient
 {
-    private InvoiceboxHttpClient $client;
+    private HttpClientInterface $client;
+    private string $authKey;
+    private string $apiUrl;
     private ?string $defaultMerchantId;
 
     public function __construct(
-        InvoiceboxHttpClient $client,
+        HttpClientInterface $client,
+        string $authKey,
+        string $apiUrl,
         ?string $defaultMerchantId = null
     ) {
         $this->client = $client;
+        $this->authKey = $authKey;
+        $this->apiUrl = $apiUrl;
         $this->defaultMerchantId = $defaultMerchantId;
     }
 
     public function checkAuth(): CheckAuthResponse
     {
-        $responseData = $this->client->doGetRequest('/v3/security/api/auth/auth');
+        $responseData = $this->doGetRequest('/v3/security/api/auth/auth');
 
         return CheckAuthResponse::fromArray($responseData);
     }
@@ -41,7 +50,7 @@ class InvoiceboxClient
             throw new InvalidArgument('Empty merchant id');
         }
 
-        $responseData = $this->client->doPostRequest('/v3/billing/api/order/order', $createOrderRequest->toArray());
+        $responseData = $this->doPostRequest('/v3/billing/api/order/order', $createOrderRequest->toArray());
 
         return CreateOrderResponse::fromArray($responseData);
     }
@@ -50,14 +59,14 @@ class InvoiceboxClient
         string $uuid,
         UpdateOrderRequest $updateOrderRequest
     ): CreateOrderResponse {
-        $responseData = $this->client->doPutRequest("/v3/billing/api/order/order/$uuid", $updateOrderRequest->toArray());
+        $responseData = $this->doPutRequest("/v3/billing/api/order/order/$uuid", $updateOrderRequest->toArray());
 
         return CreateOrderResponse::fromArray($responseData);
     }
 
     public function deleteOrder(string $uuid): CreateOrderResponse
     {
-        $responseData = $this->client->doDeleteRequest("/v3/billing/api/order/order/$uuid");
+        $responseData = $this->doDeleteRequest("/v3/billing/api/order/order/$uuid");
 
         return CreateOrderResponse::fromArray($responseData);
     }
@@ -67,7 +76,7 @@ class InvoiceboxClient
      */
     public function findOrderByFilter(Filter $filter)
     {
-        $responseRawData = $this->client->doGetRequest(
+        $responseRawData = $this->doGetRequest(
             '/v3/filter/api/order/order',
             $filter->getQuery()
         );
@@ -77,5 +86,97 @@ class InvoiceboxClient
         }
 
         return $responseData;
+    }
+
+
+    private function doPostRequest(string $url, array $body): array
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->apiUrl . $url,
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->authKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ],
+                'json' => $body
+            ]
+        );
+
+        return $this->prepareResponse($response);
+    }
+
+    private function doGetRequest(string $url, array $query = []): array
+    {
+        $response = $this->client->request(
+            'GET',
+            $this->apiUrl . $url,
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->authKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ],
+                'query' => $query
+            ]
+        );
+
+        return $this->prepareResponse($response);
+    }
+
+    private function doPutRequest(string $url, array $body): array
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->apiUrl . $url,
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->authKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ],
+                'json' => $body
+            ]
+        );
+
+        return $this->prepareResponse($response);
+    }
+
+    private function doDeleteRequest(string $url, array $query = []): array
+    {
+        $response = $this->client->request(
+            'DELETE',
+            $this->apiUrl . $url,
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->authKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ],
+                'query' => $query
+            ]
+        );
+
+        return $this->prepareResponse($response);
+    }
+
+    private function prepareResponse(ResponseInterface $response): array
+    {
+        try {
+            $responseData = $response->toArray(false);
+        } catch (JsonException $e) {
+            throw new InvalidArgument($e->getMessage());
+        }
+
+        if (isset($responseData['error'])) {
+            throw new InvalidArgument($responseData['error']['code']);
+        }
+
+        if (isset($responseData['data'])) {
+            return $responseData['data'];
+        }
+
+        throw new InvalidArgument('wrong_response');
     }
 }

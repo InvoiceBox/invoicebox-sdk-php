@@ -2,8 +2,6 @@
 
 namespace Invoicebox\Sdk\Tests\Request;
 
-use Invoicebox\Sdk\Client\InvoiceboxClient;
-use Invoicebox\Sdk\Client\InvoiceboxHttpClient;
 use Invoicebox\Sdk\DTO\Enum\BasketItemType;
 use Invoicebox\Sdk\DTO\Enum\PaymentType;
 use Invoicebox\Sdk\DTO\Enum\VatCode;
@@ -12,8 +10,6 @@ use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\LegalCustomer;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Invoicebox\Sdk\Tests\InvoiceboxTestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 class CreateOrderTest extends InvoiceboxTestCase
 {
@@ -69,21 +65,8 @@ class CreateOrderTest extends InvoiceboxTestCase
      */
     public function createInvoiceboxOrderWrongAmount()
     {
-        $mock = new MockHttpClient();
-        $mock->setResponseFactory(
-            new MockResponse(file_get_contents('mock/wrong-amount-response.json'))
-        );
+        $mockClient = $this->createMockClient('mock/wrong-amount-response.json');
 
-        $mockHttpClient = new InvoiceboxHttpClient(
-            $mock,
-            '',
-            'b37c4c689295904ed21eee5d9a48d42e',
-        );
-
-        $mockClient = new InvoiceboxClient(
-            $mockHttpClient,
-            'ffffffff-ffff-ffff-ffff-ffffffffffff'
-        );
         try {
             $request = new CreateOrderRequest(
                 'Проездной билет',

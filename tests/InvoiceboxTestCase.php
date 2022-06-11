@@ -3,7 +3,6 @@
 namespace Invoicebox\Sdk\Tests;
 
 use Invoicebox\Sdk\Client\InvoiceboxClient;
-use Invoicebox\Sdk\Client\InvoiceboxHttpClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -17,14 +16,10 @@ class InvoiceboxTestCase extends TestCase
             new MockResponse(file_get_contents(__DIR__ . '/' . $responseFile))
         );
 
-        $mockHttpClient = new InvoiceboxHttpClient(
+        return new InvoiceboxClient(
             $mock,
             '',
             'b37c4c689295904ed21eee5d9a48d42e',
-        );
-
-        return new InvoiceboxClient(
-            $mockHttpClient,
             'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
     }
