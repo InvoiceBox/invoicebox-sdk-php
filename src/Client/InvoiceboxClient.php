@@ -21,13 +21,13 @@ class InvoiceboxClient
 
     public function __construct(
         HttpClientInterface $client,
-        string $authKey,
         string $apiUrl,
+        string $authKey,
         ?string $defaultMerchantId = null
     ) {
         $this->client = $client;
-        $this->authKey = $authKey;
         $this->apiUrl = $apiUrl;
+        $this->authKey = $authKey;
         $this->defaultMerchantId = $defaultMerchantId;
     }
 
