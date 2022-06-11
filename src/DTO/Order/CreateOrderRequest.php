@@ -1,6 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\CreateOrderRequest;
+namespace Invoicebox\Sdk\DTO\Order;
 
 class CreateOrderRequest
 {
@@ -172,20 +172,20 @@ class CreateOrderRequest
         }
 
         return [
-            $this->description,
-            $this->merchantId,
-            $this->merchantOrderId,
-            $this->amount,
-            $this->vatAmount,
-            $this->currencyId,
-            $this->languageId,
-            $this->expirationDate,
-            $cartItemsArray,
-            $this->customer->toArray(),
-            $this->notificationUrl,
-            $this->successUrl,
-            $this->failUrl,
-            $this->returnUrl
+            'description' => $this->description,
+            'merchantId' => $this->merchantId,
+            'merchantOrderId' => $this->merchantOrderId,
+            'amount' => $this->amount,
+            'vatAmount' => $this->vatAmount,
+            'currencyId' => $this->currencyId,
+            'languageId' => $this->languageId,
+            'expirationDate' => $this->expirationDate->format('Y-m-d\TH:i:sP'),
+            'basketItems' => $cartItemsArray,
+            'customer' => $this->customer->toArray(),
+            'notificationUrl' => $this->notificationUrl,
+            'successUrl' => $this->successUrl,
+            'failUrl' => $this->failUrl,
+            'returnUr' => $this->returnUrl
         ];
     }
 }

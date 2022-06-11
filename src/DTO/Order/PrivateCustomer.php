@@ -1,6 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\CreateOrderRequest;
+namespace Invoicebox\Sdk\DTO\Order;
 
 class PrivateCustomer
 {
@@ -42,10 +42,10 @@ class PrivateCustomer
     public function toArray(): array
     {
         return [
-            $this->type,
-            $this->name,
-            $this->phone,
-            $this->email
+            'type' => $this->type,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email
         ];
     }
 }

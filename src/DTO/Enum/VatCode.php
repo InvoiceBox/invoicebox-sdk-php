@@ -1,6 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\Types;
+namespace Invoicebox\Sdk\DTO\Enum;
 
 class VatCode
 {

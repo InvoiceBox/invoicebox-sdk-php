@@ -1,10 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO;
-
-use Invoicebox\Sdk\DTO\CreateOrderRequest\LegalCustomer;
-use Invoicebox\Sdk\DTO\CreateOrderRequest\PrivateCustomer;
-use Invoicebox\Sdk\DTO\UpdateOrderRequest\BasketItem;
+namespace Invoicebox\Sdk\DTO\Order;
 
 class UpdateOrderRequest
 {
@@ -13,7 +9,7 @@ class UpdateOrderRequest
     private ?float $vatAmount = null;
     private ?\DateTimeInterface $expirationDate = null;
     /**
-     * @var BasketItem[]|null
+     * @var CartItem[]|null
      */
     private ?array $basketItems = null;
     private ?object $metaData = null;

@@ -5,8 +5,7 @@ namespace Invoicebox\Sdk\Exception;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Exception;
 
-abstract class InvoiceboxException extends Exception implements
-    HttpExceptionInterface
+abstract class InvoiceboxException extends Exception implements HttpExceptionInterface
 {
     protected $message = 'Error';
     protected int $statusCode = 400;

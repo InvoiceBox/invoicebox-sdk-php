@@ -4,7 +4,7 @@ namespace Invoicebox\Sdk\DTO\Filter;
 
 class Filter
 {
-    private array $query;
+    private array $query = [];
 
     public function getQuery(): array
     {

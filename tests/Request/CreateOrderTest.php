@@ -1,37 +1,28 @@
 <?php
 
-namespace Invoicebox\Sdk\Tests\Unit;
+namespace Invoicebox\Sdk\Tests\Request;
 
 use Invoicebox\Sdk\Client\InvoiceboxClient;
-use Invoicebox\Sdk\DTO\CreateOrderRequest\CartItem;
-use Invoicebox\Sdk\DTO\CreateOrderRequest\CreateOrderRequest;
-use Invoicebox\Sdk\DTO\CreateOrderRequest\LegalCustomer;
-use Invoicebox\Sdk\DTO\Types\BasketItemType;
-use Invoicebox\Sdk\DTO\Types\PaymentType;
-use Invoicebox\Sdk\DTO\Types\VatCode;
+use Invoicebox\Sdk\Client\InvoiceboxHttpClient;
+use Invoicebox\Sdk\DTO\Enum\BasketItemType;
+use Invoicebox\Sdk\DTO\Enum\PaymentType;
+use Invoicebox\Sdk\DTO\Enum\VatCode;
+use Invoicebox\Sdk\DTO\Order\CartItem;
+use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
+use Invoicebox\Sdk\DTO\Order\LegalCustomer;
 use Invoicebox\Sdk\Exception\InvalidArgument;
-use PHPUnit\Framework\TestCase;
+use Invoicebox\Sdk\Tests\InvoiceboxTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class CreateInvoiceboxOrderTest extends TestCase
+class CreateOrderTest extends InvoiceboxTestCase
 {
     /**
      * @test
      */
     public function createInvoiceboxOrder()
     {
-        $mock = new MockHttpClient();
-        $mock->setResponseFactory(
-            new MockResponse(file_get_contents('./tests/mock/success-create-order-response.json'))
-        );
-
-        $mockClient = new InvoiceboxClient(
-            $mock,
-            '',
-            'b37c4c689295904ed21eee5d9a48d42e',
-            'ffffffff-ffff-ffff-ffff-ffffffffffff'
-        );
+        $mockClient = $this->createMockClient('mock/success-create-order-response.json');
 
         $request = new CreateOrderRequest(
             'Проездной билет',
@@ -80,13 +71,17 @@ class CreateInvoiceboxOrderTest extends TestCase
     {
         $mock = new MockHttpClient();
         $mock->setResponseFactory(
-            new MockResponse(file_get_contents('./tests/mock/wrong-amount-response.json'))
+            new MockResponse(file_get_contents('mock/wrong-amount-response.json'))
         );
 
-        $mockClient = new InvoiceboxClient(
+        $mockHttpClient = new InvoiceboxHttpClient(
             $mock,
             '',
             'b37c4c689295904ed21eee5d9a48d42e',
+        );
+
+        $mockClient = new InvoiceboxClient(
+            $mockHttpClient,
             'ffffffff-ffff-ffff-ffff-ffffffffffff'
         );
         try {

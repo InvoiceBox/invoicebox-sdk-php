@@ -1,10 +1,10 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\CreateOrderResponse;
+namespace Invoicebox\Sdk\DTO\Order;
 
 use Invoicebox\Sdk\Exception\InvalidArgument;
 
-class CreateOrderResponseData
+class CreateOrderResponse
 {
     private string $id;
     private string $paymentUrl;
@@ -43,7 +43,7 @@ class CreateOrderResponseData
         return $this->orderContainerId;
     }
 
-    public static function fromArray(array $responseData): CreateOrderResponseData
+    public static function fromArray(array $responseData): CreateOrderResponse
     {
         $response = new self();
         try {

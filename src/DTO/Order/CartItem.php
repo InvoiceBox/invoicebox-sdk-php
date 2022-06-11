@@ -1,6 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\CreateOrderRequest;
+namespace Invoicebox\Sdk\DTO\Order;
 
 class CartItem
 {
@@ -119,20 +119,25 @@ class CartItem
 
     public function toArray(): array
     {
-        return [
-            $this->sku,
-            $this->name,
-            $this->measure,
-            $this->measureCode,
-            $this->quantity,
-            $this->amount,
-            $this->totalAmount,
-            $this->totalVatAmount,
-            $this->excise,
-            $this->vatCode,
-            $this->type,
-            $this->paymentType,
-            $this->amountWoVat
+        $data = [
+            'sku' => $this->sku,
+            'name' => $this->name,
+            'measure' => $this->measure,
+            'measureCode' => $this->measureCode,
+            'quantity' => $this->quantity,
+            'amount' => $this->amount,
+            'totalAmount' => $this->totalAmount,
+            'totalVatAmount' => $this->totalVatAmount,
+            'vatCode' => $this->vatCode,
+            'type' => $this->type,
+            'paymentType' => $this->paymentType,
+            'amountWoVat' => $this->amountWoVat
         ];
+
+        if ($this->excise) {
+            $data['excise'] = $this->excise;
+        }
+
+        return $data;
     }
 }

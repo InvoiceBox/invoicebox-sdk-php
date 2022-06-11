@@ -1,6 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\CreateOrderRequest;
+namespace Invoicebox\Sdk\DTO\Order;
 
 class LegalCustomer extends PrivateCustomer
 {
@@ -32,6 +32,13 @@ class LegalCustomer extends PrivateCustomer
 
     public function toArray(): array
     {
-        return array_merge(parent::toArray(), [$this->vatNumber, $this->registrationAddress]);
+        return [
+            'type' => $this->type,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'vatNumber' => $this->vatNumber,
+            'registrationAddress' => $this->registrationAddress,
+        ];
     }
 }
