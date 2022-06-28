@@ -7,6 +7,7 @@ use Invoicebox\Sdk\DTO\Filter\Filter;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
+use Invoicebox\Sdk\Exception\ExceptionFactory;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -170,7 +171,7 @@ class InvoiceboxClient
         }
 
         if (isset($responseData['error'])) {
-            throw new InvalidArgument($responseData['error']['code']);
+            throw ExceptionFactory::create($responseData['error']);
         }
 
         if (isset($responseData['data'])) {

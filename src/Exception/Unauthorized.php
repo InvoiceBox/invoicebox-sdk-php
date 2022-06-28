@@ -2,6 +2,7 @@
 
 namespace Invoicebox\Sdk\Exception;
 
-class InvalidArgument extends GateException
+class Unauthorized extends GateException
 {
+
 }
