@@ -5,15 +5,23 @@ namespace Invoicebox\Sdk\DTO;
 class NotificationResult
 {
     public const ORDER_NOT_FOUND = 'order_not_found';
+
     public const SIGNATURE_ERROR = 'signature_error';
+
     public const ORDER_WRONG_AMOUNT = 'order_wrong_amount';
+
     public const ORDER_WRONG_STATUS = 'order_wrong_status';
+
     public const OUT_OF_SERVICE = 'out_of_service';
+
     public const ORDER_ALREADY_PAID = 'order_already_paid';
+
     public const SUCCESS = 'success';
 
     private string $status;
+
     private ?string $code = null;
+
     private ?string $message = null;
 
     public function __construct(string $type)
@@ -74,15 +82,10 @@ class NotificationResult
     {
         $data = [
             'status' => $this->status,
+            'code' => $this->code,
+            'message' => $this->message,
         ];
 
-        if ($this->code) {
-            $data['code'] = $this->code;
-        }
-        if ($this->message) {
-            $data['message'] = $this->message;
-        }
-
-        return $data;
+        return array_filter($data);
     }
 }

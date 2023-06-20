@@ -5,14 +5,20 @@ namespace Invoicebox\Sdk\DTO\Order;
 class UpdateOrderRequest
 {
     private ?string $description = null;
+
     private ?float $amount = null;
+
     private ?float $vatAmount = null;
+
     private ?\DateTimeInterface $expirationDate = null;
+
     /**
-     * @var CartItem[]|null
+     * @var BasketItem[]|null
      */
     private ?array $basketItems = null;
-    private ?object $metaData = null;
+
+    private ?array $metaData = null;
+
     /**
      * @var null|LegalCustomer|PrivateCustomer
      */
@@ -68,16 +74,19 @@ class UpdateOrderRequest
         $this->basketItems = $basketItems;
     }
 
-    public function getMetaData(): ?object
+    public function getMetaData(): ?array
     {
         return $this->metaData;
     }
 
-    public function setMetaData(?object $metaData): void
+    public function setMetaData(?array $metaData): void
     {
         $this->metaData = $metaData;
     }
 
+    /**
+     * @return LegalCustomer|PrivateCustomer|null
+     */
     public function getCustomer()
     {
         return $this->customer;
@@ -100,14 +109,14 @@ class UpdateOrderRequest
             $basketItemsArray = null;
         }
 
-        return [
+        return array_filter([
             $this->description,
             $this->amount,
             $this->vatAmount,
             $this->expirationDate,
             $basketItemsArray,
-            (array)$this->metaData,
-            $this->customer ? $this->customer->toArray() : null
-        ];
+            $this->metaData,
+            $this->customer ? $this->customer->toArray() : null,
+        ], fn ($value) => !is_null($value));
     }
 }

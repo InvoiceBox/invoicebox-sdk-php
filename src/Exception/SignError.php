@@ -2,6 +2,6 @@
 
 namespace Invoicebox\Sdk\Exception;
 
-class InternalException extends GateException
+class SignError extends GateException
 {
 }

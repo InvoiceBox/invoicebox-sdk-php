@@ -17,7 +17,6 @@ class UpdateOrderTest extends InvoiceboxTestCase
         $request = new UpdateOrderRequest();
         $request->setDescription('Проездной');
 
-
         $response = $mockClient->updateOrder('017f2c3c-e880-4a08-abc6-7bd3117eea2d', $request);
 
         $this->assertNotNull($response);

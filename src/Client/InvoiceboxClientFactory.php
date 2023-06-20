@@ -16,14 +16,12 @@ class InvoiceboxClientFactory
 
     public function createClient(
         string $apiUrl,
-        string $authKey,
-        ?string $defaultMerchantId = null
+        string $authKey
     ): InvoiceboxClient {
         return new InvoiceboxClient(
             $this->client,
             $apiUrl,
-            $authKey,
-            $defaultMerchantId
+            $authKey
         );
     }
 }
