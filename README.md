@@ -11,17 +11,17 @@ PHP 7.4+ (или более поздняя версия)
 2. В консоле выполните следующую команду:
 
 ```
-composer require invoicebox/invoicebox-sdk-php
+composer require invoicebox/sdk-php
 ```
 
 Пропишите в файле composer.json вашего проекта:
 
-1. Добавьте строку "invoicebox/invoicebox-sdk-php": "^1.0" в список зависимостей вашего проекта в файле composer.json
+1. Добавьте строку "invoicebox/sdk-php": "^1.0" в список зависимостей вашего проекта в файле composer.json
 
 ```
    "require": {
         "php": ">=7.4",
-        "invoicebox/invoicebox-sdk-php": "^1.0"
+        "invoicebox/sdk-php": "^1.0"
 ```
 
 2. Обновите зависимости вашего проекта. В консоле, в папке с файлом composer.json выполните следующую команду:
@@ -48,30 +48,38 @@ require __DIR__ . '/vendor/autoload.php';
 
 ## Пример использования
 
-```
+```php
+use Invoicebox\Sdk\Client\InvoiceboxClient;
+use Invoicebox\Sdk\DTO\Enum\BasketItemType;
+use Invoicebox\Sdk\DTO\Enum\PaymentType;
+use Invoicebox\Sdk\DTO\Enum\VatCode;
+use Invoicebox\Sdk\DTO\Order\BasketItem;
+use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
+use Invoicebox\Sdk\DTO\Order\LegalCustomer;
+use Symfony\Component\HttpClient\HttpClient;
+
+/**
+ * Создание клиента, с ключем авторизации
+ */
 $httpClient = new HttpClient();
 
 $ibClient = new InvoiceboxClient(
     $httpClient,
-    'b37c4c689295904ed21eee5d9a48d42e', /* Токен */
-    'ffffffff-ffff-ffff-ffff-ffffffffffff' /* Идентификатор магазина */
+    'b37c4c689295904ed21eee5d9a48d42e',
 );
 
-$createOrderRequest = new CreateOrderRequest(
-    'Оплата заказа №123',
-    '123', /* Идентификатор заказа */
-    100.88, /* Стоимость заказа итого */
-    0.00, /* Сумма налога в заказе итого */
-    'RUB', /* Идентификатор валюты заказа */
-    (new DateTime())->modify('+1 day') /* Срок оплаты (жизни) заказа */
-);
+/**
+ * Проверка авторизации (необязательный шаг, для тестирования наличия доступа)
+ */
+$result = $ibClient->checkAuth();
+if ($result->getUserId()) {
+    echo "Успешная авторизация \n";
+}
 
-// $createOrderRequest->setReturnUrl($returnUrl); /* Ссылка возврата в магазин */
-// $createOrderRequest->setSuccessUrl($returnUrl); /* Ссылка возврата в магазин после успешной оплаты */
-// $createOrderRequest->setFailUrl($returnUrl);  /* Ссылка возврата в магазин при ошибке оплаты */
-// $createOrderRequest->setNotificationUrl('https://www.example.com/api/integration/invoicebox-v3');  /* Ссылка уведомления магазина об оплате через callback */
-
-$invoiceboxCartItem = new CartItem(
+/**
+ * Создание позиций заказа, заполнение данных клиент и заполнение данных заказа
+ */
+$basketItems = new BasketItem(
     '0123456789',
     'Black Edition',
     'шт.',
@@ -79,34 +87,50 @@ $invoiceboxCartItem = new CartItem(
     1.0,
     2790.67,
     2790.67,
+    2790.67,
     0.0,
     VatCode::VATNONE,
     BasketItemType::COMMODITY,
     PaymentType::FULL_PREPAYMENT,
-    2790.67
+
 );
-$createOrderRequest->addCartItem($invoiceboxCartItem);
 
 /* Если плательщик - юридическое лицо */
-//    $customer = new LegalCustomer(
-//        'ООО "Ромашка"',
-//        '79111231212',
-//        'my@romashkacompany.dd',
-//        '2323232323', /* ИНН */
-//        'г. Ижевск, ул. Сверидова, д.1, оф. 323'
-//    );
+$customer = new LegalCustomer(
+    'ООО "Ромашка"',
+    '79111231212',
+    'my@romashkacompany.dd',
+    '2323232323', /* ИНН */
+    'г. Ижевск, ул. Сверидова, д.1, оф. 323'
+);
 
 /* Если плательщик - физическое лицо */
-//    $customer = new PrivateCustomer(
-//        'Иванов Иван Иванович',
-//        '79111231212',
-//        'ivanov@ivanivanovich.dd'
-//    );
+$customer = new PrivateCustomer(
+    'Иванов Иван Иванович',
+    '79111231212',
+    'ivanov@ivanivanovich.dd'
+);
 
-$createOrderRequest->setCustomer($customer);
+$request = new CreateOrderRequest(
+    'Проездной билет',
+    'ffffffff-ffff-ffff-ffff-ffffffffffff', /* Идентификатор магазина */
+    123, /* Идентификатор заказа */
+    2790.67, /* Стоимость заказа итого */
+    0.0, /* Сумма налога в заказе итого */
+    'RUB', /* Идентификатор валюты заказа */
+    new \DateTime('tomorrow'), /* Срок оплаты (жизни) заказа */
+    [$basketItems],
+    $customer
+);
 
-$orderResponseData = $ibClient->createOrder($createOrderRequest);
+/**
+ * Создание заказа
+ */
+$result = $ibClient->createOrder($request);
+
+if ($result->getPaymentUrl()) {
+    echo sprintf('Заказ успешно создан - ссылка на оплату - %s', $result->getPaymentUrl());
+}
 
 /* Redirect to: $orderResponseData->getPaymentUrl() */
-
 ```

@@ -4,11 +4,9 @@ use Invoicebox\Sdk\Client\InvoiceboxClient;
 use Invoicebox\Sdk\DTO\Enum\BasketItemType;
 use Invoicebox\Sdk\DTO\Enum\PaymentType;
 use Invoicebox\Sdk\DTO\Enum\VatCode;
-use Invoicebox\Sdk\DTO\NotificationResult;
 use Invoicebox\Sdk\DTO\Order\BasketItem;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\LegalCustomer;
-use Invoicebox\Sdk\SignValidator;
 use Symfony\Component\HttpClient\HttpClient;
 
 require __DIR__ . '/../vendor/autoload.php';
