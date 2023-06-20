@@ -5,14 +5,17 @@ namespace Invoicebox\Sdk\DTO\Order;
 class PrivateCustomer
 {
     protected string $type = 'private';
-    protected string $name;
-    protected string $phone;
-    protected string $email;
+
+    protected ?string $name = null;
+
+    protected ?string $phone = null;
+
+    protected ?string $email = null;
 
     public function __construct(
-        string $name,
-        string $phone,
-        string $email
+        ?string $name = null,
+        ?string $phone = null,
+        ?string $email = null
     ) {
         $this->name = $name;
         $this->phone = $phone;
@@ -41,11 +44,20 @@ class PrivateCustomer
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'type' => $this->type,
             'name' => $this->name,
             'phone' => $this->phone,
-            'email' => $this->email
-        ];
+            'email' => $this->email,
+        ]);
+    }
+
+    public static function fromArray(array $data): PrivateCustomer
+    {
+        return new self(
+            $data['name'],
+            $data['phone'],
+            $data['email']
+        );
     }
 }

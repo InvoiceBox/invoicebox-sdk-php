@@ -4,15 +4,16 @@ namespace Invoicebox\Sdk\DTO\Order;
 
 class LegalCustomer extends PrivateCustomer
 {
-    private string $vatNumber;
-    private string $registrationAddress;
+    private ?string $vatNumber = null;
+
+    private ?string $registrationAddress = null;
 
     public function __construct(
-        string $name,
-        string $phone,
-        string $email,
-        string $vatNumber,
-        string $registrationAddress
+        ?string $name = null,
+        ?string $phone = null,
+        ?string $email = null,
+        ?string $vatNumber = null,
+        ?string $registrationAddress = null
     ) {
         parent::__construct($name, $phone, $email);
         $this->type = 'legal';
@@ -32,13 +33,31 @@ class LegalCustomer extends PrivateCustomer
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'type' => $this->type,
             'name' => $this->name,
             'phone' => $this->phone,
             'email' => $this->email,
             'vatNumber' => $this->vatNumber,
             'registrationAddress' => $this->registrationAddress,
-        ];
+        ]);
+    }
+
+    /**
+     * @return PrivateCustomer|LegalCustomer
+     */
+    public static function fromArray(array $data): PrivateCustomer
+    {
+        if ($data['type'] == 'private') {
+            return parent::fromArray($data);
+        } else {
+            return new self(
+                $data['name'],
+                $data['phone'],
+                $data['email'],
+                $data['vatNumber'],
+                $data['registrationAddress']
+            );
+        }
     }
 }

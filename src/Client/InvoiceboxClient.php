@@ -16,20 +16,21 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 class InvoiceboxClient
 {
     private HttpClientInterface $client;
+
+    private const DEFAULT_API_URL = 'https://api.invoicebox.ru';
+
     private string $authKey;
+
     private string $apiUrl;
-    private ?string $defaultMerchantId;
 
     public function __construct(
         HttpClientInterface $client,
-        string $apiUrl,
         string $authKey,
-        ?string $defaultMerchantId = null
+        ?string $apiUrl = null
     ) {
         $this->client = $client;
-        $this->apiUrl = $apiUrl;
+        $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
         $this->authKey = $authKey;
-        $this->defaultMerchantId = $defaultMerchantId;
     }
 
     public function checkAuth(): CheckAuthResponse
@@ -40,17 +41,8 @@ class InvoiceboxClient
     }
 
     public function createOrder(
-        CreateOrderRequest $createOrderRequest,
-        string $merchantId = null
+        CreateOrderRequest $createOrderRequest
     ): CreateOrderResponse {
-        if ($merchantId) {
-            $createOrderRequest->setMerchantId($merchantId);
-        } elseif ($this->defaultMerchantId !== null) {
-            $createOrderRequest->setMerchantId($this->defaultMerchantId);
-        } else {
-            throw new InvalidArgument('Empty merchant id');
-        }
-
         $responseData = $this->doPostRequest('/v3/billing/api/order/order', $createOrderRequest->toArray());
 
         return CreateOrderResponse::fromArray($responseData);
@@ -82,13 +74,14 @@ class InvoiceboxClient
             $filter->getQuery()
         );
 
+        $responseData = [];
+
         foreach ($responseRawData as $orderArray) {
             $responseData[] = CreateOrderResponse::fromArray($orderArray);
         }
 
         return $responseData;
     }
-
 
     private function doPostRequest(string $url, array $body): array
     {
@@ -99,9 +92,9 @@ class InvoiceboxClient
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
                     'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
+                    'Accept' => 'application/json',
                 ],
-                'json' => $body
+                'json' => $body,
             ]
         );
 
@@ -117,9 +110,9 @@ class InvoiceboxClient
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
                     'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
+                    'Accept' => 'application/json',
                 ],
-                'query' => $query
+                'query' => $query,
             ]
         );
 
@@ -135,9 +128,9 @@ class InvoiceboxClient
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
                     'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
+                    'Accept' => 'application/json',
                 ],
-                'json' => $body
+                'json' => $body,
             ]
         );
 
@@ -153,9 +146,9 @@ class InvoiceboxClient
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
                     'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
+                    'Accept' => 'application/json',
                 ],
-                'query' => $query
+                'query' => $query,
             ]
         );
 
