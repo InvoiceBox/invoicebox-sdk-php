@@ -33,9 +33,9 @@ class InvoiceboxClient
         ?string $apiVersion = null
     ) {
         $this->client = $client;
+        $this->authKey = $authKey;
         $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
         $this->apiVersion = $apiVersion ?? self::DEFAULT_API_VERSION;
-        $this->authKey = $authKey;
     }
 
     public function checkAuth(): CheckAuthResponse
