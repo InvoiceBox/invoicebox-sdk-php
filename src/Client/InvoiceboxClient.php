@@ -19,23 +19,28 @@ class InvoiceboxClient
 
     private const DEFAULT_API_URL = 'https://api.invoicebox.ru';
 
+    private const DEFAULT_API_VERSION = 'v3';
+
     private string $authKey;
 
     private string $apiUrl;
+    private string $apiVersion;
 
     public function __construct(
         HttpClientInterface $client,
         string $authKey,
-        ?string $apiUrl = null
+        ?string $apiUrl = null,
+        ?string $apiVersion = null
     ) {
         $this->client = $client;
         $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
+        $this->apiVersion = $apiVersion ?? self::DEFAULT_API_VERSION;
         $this->authKey = $authKey;
     }
 
     public function checkAuth(): CheckAuthResponse
     {
-        $responseData = $this->doGetRequest('/v3/security/api/auth/auth');
+        $responseData = $this->doGetRequest("/security/api/auth/auth");
 
         return CheckAuthResponse::fromArray($responseData);
     }
@@ -43,7 +48,7 @@ class InvoiceboxClient
     public function createOrder(
         CreateOrderRequest $createOrderRequest
     ): CreateOrderResponse {
-        $responseData = $this->doPostRequest('/v3/billing/api/order/order', $createOrderRequest->toArray());
+        $responseData = $this->doPostRequest('/billing/api/order/order', $createOrderRequest->toArray());
 
         return CreateOrderResponse::fromArray($responseData);
     }
@@ -52,14 +57,14 @@ class InvoiceboxClient
         string $uuid,
         UpdateOrderRequest $updateOrderRequest
     ): CreateOrderResponse {
-        $responseData = $this->doPutRequest("/v3/billing/api/order/order/$uuid", $updateOrderRequest->toArray());
+        $responseData = $this->doPutRequest("/billing/api/order/order/$uuid", $updateOrderRequest->toArray());
 
         return CreateOrderResponse::fromArray($responseData);
     }
 
     public function deleteOrder(string $uuid): CreateOrderResponse
     {
-        $responseData = $this->doDeleteRequest("/v3/billing/api/order/order/$uuid");
+        $responseData = $this->doDeleteRequest("/billing/api/order/order/$uuid");
 
         return CreateOrderResponse::fromArray($responseData);
     }
@@ -70,7 +75,7 @@ class InvoiceboxClient
     public function findOrderByFilter(Filter $filter)
     {
         $responseRawData = $this->doGetRequest(
-            '/v3/filter/api/order/order',
+            '/filter/api/order/order',
             $filter->getQuery()
         );
 
@@ -87,7 +92,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'POST',
-            $this->apiUrl . $url,
+            $this->apiUrl . '/' . $this->apiVersion . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -105,7 +110,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'GET',
-            $this->apiUrl . $url,
+            $this->apiUrl . '/' . $this->apiVersion . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -123,7 +128,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'POST',
-            $this->apiUrl . $url,
+            $this->apiUrl . '/' . $this->apiVersion . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
@@ -141,7 +146,7 @@ class InvoiceboxClient
     {
         $response = $this->client->request(
             'DELETE',
-            $this->apiUrl . $url,
+            $this->apiUrl . '/' . $this->apiVersion . $url,
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->authKey,
