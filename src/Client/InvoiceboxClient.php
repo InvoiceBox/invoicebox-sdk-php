@@ -9,22 +9,26 @@ use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\ExceptionFactory;
 use Invoicebox\Sdk\Exception\InvalidArgument;
-use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Throwable;
 
 class InvoiceboxClient
 {
-    private HttpClientInterface $client;
+    /**
+     * @var HttpClientInterface
+     */
+    private $client;
 
     private const DEFAULT_API_URL = 'https://api.invoicebox.ru';
 
     private const DEFAULT_API_VERSION = 'v3';
 
-    private string $authKey;
+    private $authKey;
 
-    private string $apiUrl;
-    private string $apiVersion;
+    private $apiUrl;
+
+    private $apiVersion;
 
     public function __construct(
         HttpClientInterface $client,
@@ -164,7 +168,7 @@ class InvoiceboxClient
     {
         try {
             $responseData = $response->toArray(false);
-        } catch (JsonException $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgument($e->getMessage());
         }
 

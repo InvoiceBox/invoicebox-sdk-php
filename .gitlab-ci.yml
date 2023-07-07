@@ -1,0 +1,53 @@
+cache:
+  paths:
+    - vendor/
+variables:
+  DOCKER_IMAGE_ID: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/php:8.1-fpm-alpine
+
+stages:
+  - lint
+  - test
+  - deploy
+
+.docker_login: &docker_login
+  before_script:
+    - export DOCKER_CONFIG=${PWD}
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+cs_check:
+  stage: lint
+  only:
+    - master
+    - merge_requests
+  script:
+    - composer install --ignore-platform-reqs
+    - ./vendor/bin/ecs check
+
+static_analyse:
+  stage: lint
+  only:
+    - master
+    - merge_requests
+  script:
+    - composer install --ignore-platform-reqs
+    - vendor/bin/phpstan analyse --memory-limit 512M
+
+test:
+  <<: *docker_login
+  stage: test
+  only:
+    - master
+    - merge_requests
+  script:
+    - composer install --ignore-platform-reqs
+    - docker run -v $(pwd):/app --rm -w /app -u "$(id -u):$(id -g)" $DOCKER_IMAGE_ID vendor/bin/phpunit --configuration /app/phpunit.xml --log-junit /app/junit.xml
+  artifacts:
+    reports:
+      junit: junit.xml
+
+publish:
+  only:
+    - tags
+  stage: deploy
+  script:
+    - 'curl -sS --show-error --fail --data tag=${CI_COMMIT_TAG} --header "JOB-TOKEN: $CI_JOB_TOKEN" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/composer"'

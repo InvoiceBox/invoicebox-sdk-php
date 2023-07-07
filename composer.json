@@ -16,9 +16,9 @@
     "url": "https://github.com/InvoiceBox/invoicebox-sdk-php/archive/refs/heads/master.zip"
   },
   "require": {
-    "php": ">=7.4",
-    "symfony/http-client": "^6.0",
-    "symfony/http-kernel": "^6.0"
+    "php": "^7.4|^8.1",
+    "symfony/http-client-contracts": "^2.0|^3.0",
+    "symfony/http-client": "^5.0|^6.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
