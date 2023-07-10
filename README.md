@@ -61,7 +61,7 @@ use Symfony\Component\HttpClient\HttpClient;
 /**
  * Создание клиента, с ключем авторизации
  */
-$httpClient = new HttpClient();
+$httpClient = HttpClient::create();
 
 $ibClient = new InvoiceboxClient(
     $httpClient,
