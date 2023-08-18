@@ -9,14 +9,12 @@ use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\ExceptionFactory;
 use Invoicebox\Sdk\Exception\InvalidArgument;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
 class InvoiceboxClient
 {
     /**
-     * @var HttpClientInterface
+     * @var HttpClient
      */
     private $client;
 
@@ -31,7 +29,7 @@ class InvoiceboxClient
     private $apiVersion;
 
     public function __construct(
-        HttpClientInterface $client,
+        HttpClient $client,
         string $authKey,
         ?string $apiUrl = null,
         ?string $apiVersion = null
@@ -131,7 +129,7 @@ class InvoiceboxClient
     private function doPutRequest(string $url, array $body): array
     {
         $response = $this->client->request(
-            'POST',
+            'PUT',
             $this->apiUrl . '/' . $this->apiVersion . $url,
             [
                 'headers' => [
@@ -164,7 +162,7 @@ class InvoiceboxClient
         return $this->prepareResponse($response);
     }
 
-    private function prepareResponse(ResponseInterface $response): array
+    private function prepareResponse(HttpResponse $response): array
     {
         try {
             $responseData = $response->toArray(false);
