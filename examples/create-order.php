@@ -7,7 +7,7 @@ use Invoicebox\Sdk\DTO\Enum\VatCode;
 use Invoicebox\Sdk\DTO\Order\BasketItem;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\LegalCustomer;
-use Symfony\Component\HttpClient\HttpClient;
+use Invoicebox\Sdk\Client\HttpClient;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -15,7 +15,7 @@ require __DIR__ . '/../vendor/autoload.php';
  * Создание клиента, с ключем авторизации
  */
 $client = new InvoiceboxClient(
-    HttpClient::create(),
+    new HttpClient(),
     'b37c4c689295904ed21eee5d9a48d42e',
 );
 

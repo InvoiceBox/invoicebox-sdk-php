@@ -22,11 +22,11 @@ class InvoiceboxClient
 
     private const DEFAULT_API_VERSION = 'v3';
 
-    private $authKey;
+    private string $authKey;
 
-    private $apiUrl;
+    private string $apiUrl;
 
-    private $apiVersion;
+    private string $apiVersion;
 
     public function __construct(
         HttpClient $client,
@@ -43,7 +43,6 @@ class InvoiceboxClient
     public function checkAuth(): CheckAuthResponse
     {
         $responseData = $this->doGetRequest("/security/api/auth/auth");
-
         return CheckAuthResponse::fromArray($responseData);
     }
 
@@ -122,7 +121,6 @@ class InvoiceboxClient
                 'query' => $query,
             ]
         );
-
         return $this->prepareResponse($response);
     }
 
