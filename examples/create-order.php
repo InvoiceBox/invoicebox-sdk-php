@@ -18,6 +18,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $client = new InvoiceboxClient(
     'b37c4c689295904ed21eee5d9a48d42e',
+    null,
+    null,
     HttpClient::create(),
 );
 /**

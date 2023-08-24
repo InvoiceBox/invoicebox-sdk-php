@@ -19,7 +19,7 @@ class InvoiceboxClient
     /**
      * @param HttpClient|HttpClientInterface $client
      **/
-    private $client;
+    private object $client;
 
     private const DEFAULT_API_URL = 'https://api.invoicebox.ru';
 
@@ -41,9 +41,9 @@ class InvoiceboxClient
         ?object $client = null
     ) {
         $this->authKey = $authKey;
-        $this->client = $client ?? new HttpClient();
-        $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
         $this->apiVersion = $apiVersion ?? self::DEFAULT_API_VERSION;
+        $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
+        $this->client = $client ?? new HttpClient();
     }
 
     public function checkAuth(): CheckAuthResponse

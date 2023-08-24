@@ -18,6 +18,8 @@ class InvoiceboxTestCase extends TestCase
 
         return new InvoiceboxClient(
             'b37c4c689295904ed21eee5d9a48d42e',
+            null,
+            null,
             $mock,
         );
     }
