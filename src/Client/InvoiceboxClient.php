@@ -8,14 +8,17 @@ use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\ExceptionFactory;
+use Invoicebox\Sdk\Exception\GateException;
 use Invoicebox\Sdk\Exception\InvalidArgument;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
 class InvoiceboxClient
 {
     /**
-     * @var HttpClient
-     */
+     * @param HttpClient|HttpClientInterface $client the client object
+     **/
     private $client;
 
     private const DEFAULT_API_URL = 'https://api.invoicebox.ru';
@@ -29,13 +32,13 @@ class InvoiceboxClient
     private string $apiVersion;
 
     public function __construct(
-        HttpClient $client,
         string $authKey,
+        HttpClientInterface|HttpClient $client = null,
         ?string $apiUrl = null,
         ?string $apiVersion = null
     ) {
-        $this->client = $client;
         $this->authKey = $authKey;
+        $this->client = $client ?? new HttpClient();
         $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
         $this->apiVersion = $apiVersion ?? self::DEFAULT_API_VERSION;
     }
@@ -160,7 +163,14 @@ class InvoiceboxClient
         return $this->prepareResponse($response);
     }
 
-    private function prepareResponse(HttpResponse $response): array
+    /**
+     * Prepare the response data.
+     *
+     * @param HttpResponse|ResponseInterface $response The response object.
+     * @return array The prepared response data.
+     * @throws InvalidArgument|GateException If the response is invalid or missing required data.
+     */
+    private function prepareResponse(HttpResponse|ResponseInterface $response): array
     {
         try {
             $responseData = $response->toArray(false);

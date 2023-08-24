@@ -7,22 +7,24 @@ use Invoicebox\Sdk\DTO\Enum\VatCode;
 use Invoicebox\Sdk\DTO\Order\BasketItem;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\LegalCustomer;
-use Invoicebox\Sdk\Client\HttpClient;
+use Symfony\Component\HttpClient\HttpClient;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 /**
  * Создание клиента, с ключем авторизации
  */
-$client = new InvoiceboxClient(
-    new HttpClient(),
-    'b37c4c689295904ed21eee5d9a48d42e',
-);
 
+
+$client = new InvoiceboxClient(
+    'b37c4c689295904ed21eee5d9a48d42e',
+    HttpClient::create(),
+);
 /**
  * Проверка авторизации (необязательный шаг, для тестирования наличия доступа)
  */
 $result = $client->checkAuth();
+
 if ($result->getUserId()) {
     echo "Успешная авторизация \n";
 }

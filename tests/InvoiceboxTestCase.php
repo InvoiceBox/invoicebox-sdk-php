@@ -17,8 +17,8 @@ class InvoiceboxTestCase extends TestCase
         );
 
         return new InvoiceboxClient(
-            $mock,
             'b37c4c689295904ed21eee5d9a48d42e',
+            $mock,
         );
     }
 }

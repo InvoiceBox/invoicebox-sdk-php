@@ -20,8 +20,8 @@ class InvoiceboxClientFactory
         ?string $version = null
     ): InvoiceboxClient {
         return new InvoiceboxClient(
-            $this->client,
             $authKey,
+            $this->client,
             $apiUrl,
             $version
         );
