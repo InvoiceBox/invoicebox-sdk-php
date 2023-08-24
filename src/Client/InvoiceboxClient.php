@@ -17,7 +17,7 @@ use Throwable;
 class InvoiceboxClient
 {
     /**
-     * @param HttpClient|HttpClientInterface $client the client object
+     * @param HttpClient|HttpClientInterface $client
      **/
     private $client;
 
@@ -31,11 +31,14 @@ class InvoiceboxClient
 
     private string $apiVersion;
 
+    /**
+     * @param HttpClientInterface|HttpClient|null $client
+     */
     public function __construct(
         string $authKey,
-        HttpClientInterface|HttpClient $client = null,
+        ?string $apiVersion = null,
         ?string $apiUrl = null,
-        ?string $apiVersion = null
+        ?object $client = null
     ) {
         $this->authKey = $authKey;
         $this->client = $client ?? new HttpClient();
@@ -46,6 +49,7 @@ class InvoiceboxClient
     public function checkAuth(): CheckAuthResponse
     {
         $responseData = $this->doGetRequest("/security/api/auth/auth");
+
         return CheckAuthResponse::fromArray($responseData);
     }
 
@@ -170,7 +174,7 @@ class InvoiceboxClient
      * @return array The prepared response data.
      * @throws InvalidArgument|GateException If the response is invalid or missing required data.
      */
-    private function prepareResponse(HttpResponse|ResponseInterface $response): array
+    private function prepareResponse($response): array
     {
         try {
             $responseData = $response->toArray(false);
