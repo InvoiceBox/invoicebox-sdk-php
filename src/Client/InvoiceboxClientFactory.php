@@ -2,8 +2,6 @@
 
 namespace Invoicebox\Sdk\Client;
 
-//use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 class InvoiceboxClientFactory
 {
     private HttpClient $client;
