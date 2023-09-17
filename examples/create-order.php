@@ -14,15 +14,19 @@ require __DIR__ . '/../vendor/autoload.php';
 /**
  * Создание клиента, с ключем авторизации
  */
-$client = new InvoiceboxClient(
-    HttpClient::create(),
-    'b37c4c689295904ed21eee5d9a48d42e',
-);
 
+
+$client = new InvoiceboxClient(
+    'b37c4c689295904ed21eee5d9a48d42e',
+    null,
+    null,
+    HttpClient::create(),
+);
 /**
  * Проверка авторизации (необязательный шаг, для тестирования наличия доступа)
  */
 $result = $client->checkAuth();
+
 if ($result->getUserId()) {
     echo "Успешная авторизация \n";
 }

@@ -8,6 +8,7 @@ use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\ExceptionFactory;
+use Invoicebox\Sdk\Exception\GateException;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -16,30 +17,33 @@ use Throwable;
 class InvoiceboxClient
 {
     /**
-     * @var HttpClientInterface
-     */
-    private $client;
+     * @param HttpClient|HttpClientInterface $client
+     **/
+    private object $client;
 
     private const DEFAULT_API_URL = 'https://api.invoicebox.ru';
 
     private const DEFAULT_API_VERSION = 'v3';
 
-    private $authKey;
+    private string $authKey;
 
-    private $apiUrl;
+    private string $apiUrl;
 
-    private $apiVersion;
+    private string $apiVersion;
 
+    /**
+     * @param HttpClientInterface|HttpClient|null $client
+     */
     public function __construct(
-        HttpClientInterface $client,
         string $authKey,
+        ?string $apiVersion = null,
         ?string $apiUrl = null,
-        ?string $apiVersion = null
+        ?object $client = null
     ) {
-        $this->client = $client;
         $this->authKey = $authKey;
-        $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
         $this->apiVersion = $apiVersion ?? self::DEFAULT_API_VERSION;
+        $this->apiUrl = $apiUrl ?? self::DEFAULT_API_URL;
+        $this->client = $client ?? new HttpClient();
     }
 
     public function checkAuth(): CheckAuthResponse
@@ -124,14 +128,13 @@ class InvoiceboxClient
                 'query' => $query,
             ]
         );
-
         return $this->prepareResponse($response);
     }
 
     private function doPutRequest(string $url, array $body): array
     {
         $response = $this->client->request(
-            'POST',
+            'PUT',
             $this->apiUrl . '/' . $this->apiVersion . $url,
             [
                 'headers' => [
@@ -164,7 +167,14 @@ class InvoiceboxClient
         return $this->prepareResponse($response);
     }
 
-    private function prepareResponse(ResponseInterface $response): array
+    /**
+     * Prepare the response data.
+     *
+     * @param HttpResponse|ResponseInterface $response The response object.
+     * @return array The prepared response data.
+     * @throws InvalidArgument|GateException If the response is invalid or missing required data.
+     */
+    private function prepareResponse($response): array
     {
         try {
             $responseData = $response->toArray(false);

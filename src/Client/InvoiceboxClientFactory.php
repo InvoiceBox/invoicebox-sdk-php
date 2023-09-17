@@ -2,14 +2,12 @@
 
 namespace Invoicebox\Sdk\Client;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 class InvoiceboxClientFactory
 {
-    private HttpClientInterface $client;
+    private HttpClient $client;
 
     public function __construct(
-        HttpClientInterface $client
+        HttpClient $client
     ) {
         $this->client = $client;
     }
@@ -20,10 +18,10 @@ class InvoiceboxClientFactory
         ?string $version = null
     ): InvoiceboxClient {
         return new InvoiceboxClient(
-            $this->client,
             $authKey,
             $apiUrl,
-            $version
+            $version,
+            $this->client,
         );
     }
 }
