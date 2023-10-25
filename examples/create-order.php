@@ -11,17 +11,26 @@ use Symfony\Component\HttpClient\HttpClient;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+
 /**
  * Создание клиента, с ключем авторизации
  */
 
+//$client = new InvoiceboxClient(
+//    'b37c4c689295904ed21eee5d9a48d42e',
+//    'v3',
+//    null,
+//    null,
+//);
 
 $client = new InvoiceboxClient(
-    'b37c4c689295904ed21eee5d9a48d42e',
+    '78436-API:0884805c7d5345818f4e5169d4ecbb2bce056e32f0081533bce9d57f399c91b1',
+    'l3',
     null,
     null,
-    HttpClient::create(),
 );
+
+
 /**
  * Проверка авторизации (необязательный шаг, для тестирования наличия доступа)
  */
@@ -34,37 +43,42 @@ if ($result->getUserId()) {
 /**
  * Создание позиций заказа, заполнение данных клиент и заполнение данных заказа
  */
-$basketItems = new BasketItem(
-    '0123456789',
+
+
+$basketItems[] = new BasketItem(
+    '12312',
     'Black Edition',
     'шт.',
     '796',
     1.0,
-    2790.67,
-    2790.67,
-    2790.67,
-    0.0,
+    1000.00,
+    1000,
+    1000.00,
+    0,
     VatCode::VATNONE,
     BasketItemType::COMMODITY,
     PaymentType::FULL_PREPAYMENT,
-
+    new \DateTime('2023-10-30')
 );
+
+
 $customer = new LegalCustomer(
-    'OOO TEST',
+    'OOO TES',
     '78121111111',
     'test@test.test',
     '7804445210',
     '123321, Колотушкина, 1, 1'
 );
+
 $request = new CreateOrderRequest(
     'Проездной билет',
-    'ffffffff-ffff-ffff-ffff-ffffffffffff',
-    random_int(1, 999999),
-    2790.67,
-    0.0,
+    '2802d45d-2557-4657-96c5-7cf50853c438',
+    strval(random_int(1,1000)),
+    1000.00,
+    0,
     'RUB',
     new \DateTime('tomorrow'),
-    [$basketItems],
+    $basketItems,
     $customer
 );
 
