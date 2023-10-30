@@ -2,6 +2,9 @@
 
 namespace Invoicebox\Sdk\DTO\Order;
 
+use DateTime;
+use DateTimeInterface;
+
 class BasketItem
 {
     private string $sku;
@@ -42,6 +45,8 @@ class BasketItem
 
     private ?array $metaData;
 
+    private ?DateTimeInterface $serviceDate;
+
     public function __construct(
         string $sku,
         string $name,
@@ -55,6 +60,7 @@ class BasketItem
         string $vatCode,
         string $type,
         string $paymentType,
+        ?DateTimeInterface $serviceDate = null,
         ?string $groupName = null,
         ?string $originCountry = null,
         ?string $originCountryCode = null,
@@ -74,6 +80,7 @@ class BasketItem
         $this->vatCode = $vatCode;
         $this->type = $type;
         $this->paymentType = $paymentType;
+        $this->serviceDate = $serviceDate;
         $this->amountWoVat = $amountWoVat;
         $this->groupName = $groupName;
         $this->originCountry = $originCountry;
@@ -149,6 +156,11 @@ class BasketItem
         return $this->paymentType;
     }
 
+    public function getServiceDate(): ?string
+    {
+        return $this->serviceDate->format('Y-m-d');
+    }
+
     public function getAmountWoVat(): float
     {
         return $this->amountWoVat;
@@ -199,6 +211,7 @@ class BasketItem
             'vatCode' => $this->vatCode,
             'type' => $this->type,
             'paymentType' => $this->paymentType,
+            'serviceDate' => $this->serviceDate ? $this->serviceDate->format('Y-m-d') : null,
             'excise' => $this->excise,
             'groupName' => $this->groupName,
             'originCountry' => $this->originCountry,
@@ -209,6 +222,9 @@ class BasketItem
         ], fn ($value) => !is_null($value));
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function fromArray(array $data)
     {
         return new self(
@@ -224,6 +240,7 @@ class BasketItem
             $data['vatCode'],
             $data['type'],
             $data['paymentType'],
+            isset($data['serviceDate']) ? new DateTime($data['serviceDate']) : null,
             $data['groupName'] ?? null,
             $data['originCountry'] ?? null,
             $data['originCountryCode'] ?? null,
