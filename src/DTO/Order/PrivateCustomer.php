@@ -27,17 +27,17 @@ class PrivateCustomer
         return $this->type;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -55,9 +55,9 @@ class PrivateCustomer
     public static function fromArray(array $data): PrivateCustomer
     {
         return new self(
-            $data['name'],
-            $data['phone'],
-            $data['email']
+            $data['name'] ?? null,
+            $data['phone'] ?? null,
+            $data['email'] ?? null
         );
     }
 }

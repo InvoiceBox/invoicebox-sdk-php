@@ -21,12 +21,12 @@ class LegalCustomer extends PrivateCustomer
         $this->registrationAddress = $registrationAddress;
     }
 
-    public function getVatNumber(): string
+    public function getVatNumber(): ?string
     {
         return $this->vatNumber;
     }
 
-    public function getRegistrationAddress(): string
+    public function getRegistrationAddress(): ?string
     {
         return $this->registrationAddress;
     }
@@ -48,16 +48,15 @@ class LegalCustomer extends PrivateCustomer
      */
     public static function fromArray(array $data): PrivateCustomer
     {
-        if ($data['type'] == 'private') {
+        if ($data['type'] === 'private') {
             return parent::fromArray($data);
-        } else {
-            return new self(
-                $data['name'],
-                $data['phone'],
-                $data['email'],
-                $data['vatNumber'],
-                $data['registrationAddress']
-            );
         }
+        return new self(
+            $data['name'] ?? null,
+            $data['phone'] ?? null,
+            $data['email'] ?? null,
+            $data['vatNumber'] ?? null,
+            $data['registrationAddress'] ?? null
+        );
     }
 }
