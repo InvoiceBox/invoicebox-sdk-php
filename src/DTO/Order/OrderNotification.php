@@ -18,7 +18,10 @@ class OrderNotification
 
     private float $amount;
 
-    private object $customer;
+    /**
+     * @var PrivateCustomer|LegalCustomer
+     */
+    private PrivateCustomer $customer;
 
     private string $currencyId;
 
@@ -84,7 +87,10 @@ class OrderNotification
         $this->amount = $amount;
     }
 
-    public function getCustomer(): object
+    /**
+     * @return PrivateCustomer|LegalCustomer
+     */
+    public function getCustomer(): PrivateCustomer
     {
         return $this->customer;
     }
