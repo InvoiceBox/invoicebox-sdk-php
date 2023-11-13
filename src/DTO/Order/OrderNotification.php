@@ -84,12 +84,12 @@ class OrderNotification
         $this->amount = $amount;
     }
 
-    public function getCustomer() : array
+    public function getCustomer(): array
     {
         return $this->customer;
     }
 
-    public function setCustomer( $customer): void
+    public function setCustomer($customer): void
     {
         $this->customer = $customer;
     }
@@ -120,11 +120,12 @@ class OrderNotification
         $orderNotification->setStatus($responseData['status']);
         $orderNotification->setMerchantId($responseData['merchantId']);
         $orderNotification->setMerchantOrderId($responseData['merchantOrderId']);
-        $orderNotification->setMerchantOrderIdVisible(($responseData['merchantOrderIdVisible']));
+        $orderNotification->setMerchantOrderIdVisible($responseData['merchantOrderIdVisible'] ?? $responseData['merchantOrderId']);
         $orderNotification->setAmount($responseData['amount']);
         $orderNotification->setCustomer($responseData['customer']);
         $orderNotification->setCurrencyId($responseData['currencyId']);
         $orderNotification->setCreatedAt(new \DateTime($responseData['createdAt']));
+
         return $orderNotification;
     }
 }
