@@ -18,7 +18,7 @@ class OrderNotification
 
     private float $amount;
 
-    private array $customer;
+    private object $customer;
 
     private string $currencyId;
 
@@ -84,14 +84,14 @@ class OrderNotification
         $this->amount = $amount;
     }
 
-    public function getCustomer(): array
+    public function getCustomer(): object
     {
         return $this->customer;
     }
 
     public function setCustomer($customer): void
     {
-        $this->customer = $customer;
+        $this->customer = LegalCustomer::fromArray($customer);
     }
 
     public function getCurrencyId(): string
