@@ -126,7 +126,9 @@ class OrderNotification
         $orderNotification->setStatus($responseData['status']);
         $orderNotification->setMerchantId($responseData['merchantId']);
         $orderNotification->setMerchantOrderId($responseData['merchantOrderId']);
-        $orderNotification->setMerchantOrderIdVisible($responseData['merchantOrderIdVisible'] ?? $responseData['merchantOrderId']);
+        if (isset($responseData['merchantOrderIdVisible'])) {
+            $orderNotification->setMerchantOrderIdVisible($responseData['merchantOrderIdVisible']);
+        }
         $orderNotification->setAmount($responseData['amount']);
         $orderNotification->setCustomer($responseData['customer']);
         $orderNotification->setCurrencyId($responseData['currencyId']);
