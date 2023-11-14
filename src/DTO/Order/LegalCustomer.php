@@ -6,6 +6,8 @@ class LegalCustomer extends PrivateCustomer
 {
     private ?string $vatNumber = null;
 
+    private ?string $taxRegistrationReasonCode = null;
+
     private ?string $registrationAddress = null;
 
     public function __construct(
@@ -13,12 +15,14 @@ class LegalCustomer extends PrivateCustomer
         ?string $phone = null,
         ?string $email = null,
         ?string $vatNumber = null,
-        ?string $registrationAddress = null
+        ?string $registrationAddress = null,
+        ?string $taxRegistrationReasonCode = null,
     ) {
         parent::__construct($name, $phone, $email);
         $this->type = 'legal';
         $this->vatNumber = $vatNumber;
         $this->registrationAddress = $registrationAddress;
+        $this->taxRegistrationReasonCode = $taxRegistrationReasonCode;
     }
 
     public function getVatNumber(): ?string
@@ -31,6 +35,11 @@ class LegalCustomer extends PrivateCustomer
         return $this->registrationAddress;
     }
 
+    public function getTaxRegistrationReasonCode(): ?string
+    {
+        return $this->taxRegistrationReasonCode;
+    }
+
     public function toArray(): array
     {
         return array_filter([
@@ -40,6 +49,7 @@ class LegalCustomer extends PrivateCustomer
             'email' => $this->email,
             'vatNumber' => $this->vatNumber,
             'registrationAddress' => $this->registrationAddress,
+            'taxRegistrationReasonCode' => $this->taxRegistrationReasonCode,
         ]);
     }
 
@@ -56,7 +66,8 @@ class LegalCustomer extends PrivateCustomer
             $data['phone'] ?? null,
             $data['email'] ?? null,
             $data['vatNumber'] ?? null,
-            $data['registrationAddress'] ?? null
+            $data['registrationAddress'] ?? null,
+            $data['taxRegistrationReasonCode'] ?? null,
         );
     }
 }
