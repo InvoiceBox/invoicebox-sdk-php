@@ -59,8 +59,8 @@ class SignTest extends InvoiceboxTestCase
             '78121111111',
             'test@test.test',
             '123321',
+            '123321, Колотушкина, 1, 1',
             '504701001',
-            '123321, Колотушкина, 1, 1'
         );
         $request = new CreateOrderRequest(
             'Проездной билет',

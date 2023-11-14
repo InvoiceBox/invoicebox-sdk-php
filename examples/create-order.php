@@ -67,8 +67,8 @@ $customer = new LegalCustomer(
     '78121111111',
     'test@test.test',
     '7804445210',
+    '123321, Колотушкина, 1, 1',
     '504701001',
-    '123321, Колотушкина, 1, 1'
 );
 
 $request = new CreateOrderRequest(
