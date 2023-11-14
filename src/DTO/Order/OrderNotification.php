@@ -14,7 +14,14 @@ class OrderNotification
 
     private string $merchantOrderId;
 
+    private string $merchantOrderIdVisible;
+
     private float $amount;
+
+    /**
+     * @var PrivateCustomer|LegalCustomer
+     */
+    private PrivateCustomer $customer;
 
     private string $currencyId;
 
@@ -60,6 +67,16 @@ class OrderNotification
         $this->merchantOrderId = $merchantOrderId;
     }
 
+    public function getMerchantOrderIdVisible(): string
+    {
+        return $this->merchantOrderIdVisible;
+    }
+
+    public function setMerchantOrderIdVisible(string $merchantOrderIdVisible): void
+    {
+        $this->merchantOrderIdVisible = $merchantOrderIdVisible;
+    }
+
     public function getAmount(): float
     {
         return $this->amount;
@@ -68,6 +85,19 @@ class OrderNotification
     public function setAmount(float $amount): void
     {
         $this->amount = $amount;
+    }
+
+    /**
+     * @return PrivateCustomer|LegalCustomer
+     */
+    public function getCustomer(): PrivateCustomer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer($customer): void
+    {
+        $this->customer = LegalCustomer::fromArray($customer);
     }
 
     public function getCurrencyId(): string
@@ -96,7 +126,11 @@ class OrderNotification
         $orderNotification->setStatus($responseData['status']);
         $orderNotification->setMerchantId($responseData['merchantId']);
         $orderNotification->setMerchantOrderId($responseData['merchantOrderId']);
+        if (isset($responseData['merchantOrderIdVisible'])) {
+            $orderNotification->setMerchantOrderIdVisible($responseData['merchantOrderIdVisible']);
+        }
         $orderNotification->setAmount($responseData['amount']);
+        $orderNotification->setCustomer($responseData['customer']);
         $orderNotification->setCurrencyId($responseData['currencyId']);
         $orderNotification->setCreatedAt(new \DateTime($responseData['createdAt']));
 
