@@ -123,6 +123,7 @@ class OrderNotification
     public static function fromArray(array $responseData): OrderNotification
     {
         $orderNotification = new self();
+        $orderNotification->setId($responseData['id']);
         $orderNotification->setStatus($responseData['status']);
         $orderNotification->setMerchantId($responseData['merchantId']);
         $orderNotification->setMerchantOrderId($responseData['merchantOrderId']);
