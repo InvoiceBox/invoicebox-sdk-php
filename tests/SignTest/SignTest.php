@@ -23,9 +23,11 @@ class SignTest extends InvoiceboxTestCase
     {
         $validator = new SignValidator();
         $order = $this->getOrder();
+        $orderId = $order->getId();
         $orderNotification = $order->toArray();
         $status = NotificationResult::SUCCESS;
         $orderNotification['status'] = $status;
+        $orderNotification['id'] = $orderId;
         $orderNotification['createdAt'] = (new \DateTime())->format('Y-m-d');
 
         $signature = hash_hmac('sha1', json_encode($orderNotification), self::SECRET_KEY);
