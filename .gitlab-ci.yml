@@ -18,7 +18,7 @@ stages:
   - ssh-add <(echo "$COMPOSER_SSH_KEY")
   - composer config --global gitlab-token.gitlab.srv.local.invbox.ru $COMPOSER_TOKEN
   - composer install --ignore-platform-reqs
-  - vendor/bin/phpunit --log-junit /app/junit.xml
+  - vendor/bin/phpunit
 
 
 test-php-74:
