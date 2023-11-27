@@ -16,7 +16,7 @@
     "url": "https://github.com/InvoiceBox/invoicebox-sdk-php/archive/refs/heads/master.zip"
   },
   "require": {
-    "php": "^7.4|^8.1",
+    "php": "^7.4|^8.0",
     "symfony/http-client-contracts": "^2.0|^3.0",
     "symfony/http-client": "^5.0|^6.0",
     "ext-curl": "*",

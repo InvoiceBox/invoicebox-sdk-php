@@ -16,7 +16,7 @@ class LegalCustomer extends PrivateCustomer
         ?string $email = null,
         ?string $vatNumber = null,
         ?string $registrationAddress = null,
-        ?string $taxRegistrationReasonCode = null,
+        ?string $taxRegistrationReasonCode = null
     ) {
         parent::__construct($name, $phone, $email);
         $this->type = 'legal';
