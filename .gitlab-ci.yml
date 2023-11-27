@@ -2,48 +2,89 @@ cache:
   paths:
     - vendor/
 variables:
-  DOCKER_IMAGE_ID: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/php:8.1-fpm-alpine
+  DOCKER_IMAGE_COMPOSER_74: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/composer:7.4
+  DOCKER_IMAGE_COMPOSER_80: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/composer:8.0
+  DOCKER_IMAGE_COMPOSER_81: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/composer:8.1
+  DOCKER_IMAGE_COMPOSER_82: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/composer:8.2
+  DOCKER_IMAGE_COMPOSER_83: registry.local.invbox.ru/invoicebox/infrastructure/infrastructure/composer:8.3
+
 
 stages:
-  - lint
   - test
   - deploy
 
-.docker_login: &docker_login
-  before_script:
-    - export DOCKER_CONFIG=${PWD}
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+default:
+  tags:
+    - docker
 
-cs_check:
-  stage: lint
-  only:
-    - master
-    - merge_requests
-  script:
-    - composer install --ignore-platform-reqs
-    - ./vendor/bin/ecs check
+.run_tests: &run_tests
+  - eval `ssh-agent -s`
+  - ssh-add <(echo "$COMPOSER_SSH_KEY")
+  - composer config --global gitlab-token.gitlab.srv.local.invbox.ru $COMPOSER_TOKEN
+  - composer install
+  - vendor/bin/phpunit --log-junit /app/junit.xml
 
-static_analyse:
-  stage: lint
-  only:
-    - master
-    - merge_requests
-  script:
-    - composer install --ignore-platform-reqs
-    - vendor/bin/phpstan analyse --memory-limit 512M
 
-test:
-  <<: *docker_login
+test-php-74:
   stage: test
+  image: $DOCKER_IMAGE_COMPOSER_74
   only:
     - master
     - merge_requests
   script:
-    - composer install --ignore-platform-reqs
-    - docker run -v $(pwd):/app --rm -w /app -u "$(id -u):$(id -g)" $DOCKER_IMAGE_ID vendor/bin/phpunit --configuration /app/phpunit.xml --log-junit /app/junit.xml
+    - *run_tests
   artifacts:
     reports:
       junit: junit.xml
+
+test-php-80:
+  stage: test
+  image: $DOCKER_IMAGE_COMPOSER_80
+  only:
+    - master
+    - merge_requests
+  script:
+    - *run_tests
+  artifacts:
+    reports:
+      junit: junit.xml
+  
+test-php-81:
+  stage: test
+  image: $DOCKER_IMAGE_COMPOSER_81
+  only:
+    - master
+    - merge_requests
+  script:
+    - *run_tests
+  artifacts:
+    reports:
+      junit: junit.xml
+
+test-php-82:
+  stage: test
+  image: $DOCKER_IMAGE_COMPOSER_82
+  only:
+    - master
+    - merge_requests
+  script:
+    - *run_tests
+  artifacts:
+    reports:
+      junit: junit.xml
+
+test-php-83:
+  stage: test
+  image: $DOCKER_IMAGE_COMPOSER_83
+  only:
+    - master
+    - merge_requests
+  script:
+    - *run_tests
+  artifacts:
+    reports:
+      junit: junit.xml
+
 
 publish:
   only:

@@ -7,7 +7,6 @@ use Invoicebox\Sdk\DTO\Enum\VatCode;
 use Invoicebox\Sdk\DTO\Order\BasketItem;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\LegalCustomer;
-use Symfony\Component\HttpClient\HttpClient;
 
 require __DIR__ . '/../vendor/autoload.php';
 
