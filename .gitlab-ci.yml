@@ -24,6 +24,7 @@ default:
   - composer install
   - vendor/bin/phpunit --log-junit /app/junit.xml
 
+
 test-php-74:
   stage: test
   image: $DOCKER_IMAGE_COMPOSER_74
