@@ -18,7 +18,7 @@ stages:
   - eval `ssh-agent -s`
   - ssh-add <(echo "$COMPOSER_SSH_KEY")
   - composer config --global gitlab-token.gitlab.srv.local.invbox.ru $COMPOSER_TOKEN
-  - composer install
+  - composer install --ignore-platform-reqs
   - vendor/bin/ecs check
   - vendor/bin/phpstan
   - vendor/bin/phpunit --log-junit /app/junit.xml
