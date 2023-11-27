@@ -21,7 +21,7 @@ stages:
   - composer install
   - vendor/bin/ecs check
   - vendor/bin/phpstan
-  - vendor/bin/phpunit --configuration /app/phpunit.xml --log-junit /app/junit.xml
+  - vendor/bin/phpunit --log-junit /app/junit.xml
 
 cs_check:
   stage: lint
