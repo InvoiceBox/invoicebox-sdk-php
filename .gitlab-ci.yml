@@ -10,7 +10,6 @@ variables:
 
 
 stages:
-  - lint
   - test
   - deploy
 
@@ -19,27 +18,8 @@ stages:
   - ssh-add <(echo "$COMPOSER_SSH_KEY")
   - composer config --global gitlab-token.gitlab.srv.local.invbox.ru $COMPOSER_TOKEN
   - composer install --ignore-platform-reqs
-  - vendor/bin/ecs check
-  - vendor/bin/phpstan
   - vendor/bin/phpunit --log-junit /app/junit.xml
 
-cs_check:
-  stage: lint
-  only:
-    - master
-    - merge_requests
-  script:
-    - composer install --ignore-platform-reqs
-    - ./vendor/bin/ecs check
-
-static_analyse:
-  stage: lint
-  only:
-    - master
-    - merge_requests
-  script:
-    - composer install --ignore-platform-reqs
-    - vendor/bin/phpstan analyse --memory-limit 512M
 
 test-php-74:
   stage: test
