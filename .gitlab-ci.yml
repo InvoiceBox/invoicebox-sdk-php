@@ -90,5 +90,6 @@ publish:
   only:
     - tags
   stage: deploy
+  image: $DOCKER_IMAGE_COMPOSER_83
   script:
     - 'curl -sS --show-error --fail --data tag=${CI_COMMIT_TAG} --header "JOB-TOKEN: $CI_JOB_TOKEN" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/composer"'
