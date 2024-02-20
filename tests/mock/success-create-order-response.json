@@ -3,6 +3,7 @@
     "id": "017f038f-c78b-736d-dc00-8bce30bd0f9f",
     "description": "Проездной билет",
     "currencyId": "RUB",
+    "shopId": 333,
     "amount": 2790.67,
     "vatAmount": 0,
     "basketItems": [

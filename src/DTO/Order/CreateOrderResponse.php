@@ -85,6 +85,7 @@ class CreateOrderResponse extends CreateOrderRequest
             $response->createdAt = $responseData['createdAt'];
             $response->status = $responseData['status'];
             $response->orderContainerId = $responseData['orderContainerId'];
+            $response->shopId = $responseData['shopId'] ?? null;
         } catch (\Exception $exception) {
             throw new InvalidArgument('Not enough data');
         }

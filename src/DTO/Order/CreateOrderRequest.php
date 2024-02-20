@@ -52,6 +52,8 @@ class CreateOrderRequest
 
     protected ?string $orderContainerId;
 
+    protected ?int $shopId;
+
     /**
      * @param null|LegalCustomer|PrivateCustomer $customer
      * @param BasketItem[] $basketItems
@@ -76,7 +78,8 @@ class CreateOrderRequest
         ?InvoiceSetting $invoiceSetting = null,
         ?OrderSetting $orderSetting = null,
         ?string $parentId = null,
-        ?string $orderContainerId = null
+        ?string $orderContainerId = null,
+        ?int $shopId = null
     ) {
         $this->description = $description;
         $this->merchantId = $merchantId;
@@ -98,6 +101,7 @@ class CreateOrderRequest
         $this->orderSetting = $orderSetting;
         $this->parentId = $parentId;
         $this->orderContainerId = $orderContainerId;
+        $this->shopId = $shopId;
     }
 
     public function getDescription(): string
@@ -317,6 +321,11 @@ class CreateOrderRequest
         $this->basketItems[] = $basketItem;
     }
 
+    public function getShopId(): ?int
+    {
+        return $this->shopId;
+    }
+
     public function toArray(): array
     {
         $baketItemsArray = [];
@@ -345,6 +354,7 @@ class CreateOrderRequest
             'orderSetting' => $this->orderSetting ? $this->orderSetting->toArray() : null,
             'parentId' => $this->parentId,
             'orderContainerId' => $this->orderContainerId,
+            'shopId' => $this->shopId,
         ], fn ($value) => !is_null($value));
     }
 }

@@ -99,7 +99,19 @@ class CreateOrderTest extends InvoiceboxTestCase
             'RUB',
             new \DateTime('yesterday'),
             [$basketItems],
-            $customer
+            $customer,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            321
         );
 
         $this->expectException(InvalidArgument::class);
