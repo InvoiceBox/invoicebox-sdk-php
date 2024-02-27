@@ -3,7 +3,7 @@
   "description": "This is a developer tool for integration with Invoicebox API",
   "type": "library",
   "license": "MIT",
-  "homepage": "https://docs.invoicebox.ru/docs/sdk/php/",
+  "homepage": "https://docs.invoicebox.ru/docs/merchant/sdk/php/",
   "keywords": ["invoicebox", "invbox", "payments", "api", "sdk"],
   "authors": [
     {
