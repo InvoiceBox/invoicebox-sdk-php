@@ -8,12 +8,20 @@ class InvoiceSetting
 
     private ?array $customerLockedFields;
 
+    private ?bool $paymentMethodIdLocked;
+
+    private ?int $paymentMethodId;
+
     public function __construct(
         ?bool $customerLocked = null,
-        ?array $customerLockedFields = null
+        ?array $customerLockedFields = null,
+        ?bool $paymentMethodIdLocked = null,
+        ?int $paymentMethodId = null
     ) {
         $this->customerLocked = $customerLocked;
         $this->customerLockedFields = $customerLockedFields;
+        $this->paymentMethodIdLocked = $paymentMethodIdLocked;
+        $this->paymentMethodId = $paymentMethodId;
     }
 
     public function getCustomerLocked(): ?bool
@@ -26,11 +34,23 @@ class InvoiceSetting
         return $this->customerLockedFields;
     }
 
+    public function getPaymentMethodIdLocked(): ?bool
+    {
+        return $this->paymentMethodIdLocked;
+    }
+
+    public function getPaymentMethodId(): ?int
+    {
+        return $this->paymentMethodId;
+    }
+
     public function toArray(): array
     {
         return array_filter([
             'customerLocked' => $this->customerLocked,
             'customerLockedFields' => $this->customerLockedFields,
+            'paymentMethodIdLocked' => $this->paymentMethodIdLocked,
+            'paymentMethodId' => $this->paymentMethodId,
         ], fn ($value) => !is_null($value));
     }
 
@@ -39,6 +59,8 @@ class InvoiceSetting
         return new self(
             $responseData['customerLocked'] ?? null,
             $responseData['customerLockedFields'] ?? null,
+            $responseData['paymentMethodIdLocked'] ?? null,
+            $responseData['paymentMethodId'] ?? null,
         );
     }
 }
