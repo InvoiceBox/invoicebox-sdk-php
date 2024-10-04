@@ -11,6 +11,7 @@ class InvoiceSetting
     private ?bool $paymentMethodIdLocked;
 
     private ?int $paymentMethodId;
+
     private ?array $customerHiddenFields;
 
     public function __construct(
@@ -60,7 +61,7 @@ class InvoiceSetting
             'paymentMethodIdLocked' => $this->paymentMethodIdLocked,
             'paymentMethodId' => $this->paymentMethodId,
             'customerHiddenFields' => $this->customerHiddenFields,
-        ], fn($value) => !is_null($value));
+        ], fn ($value) => !is_null($value));
     }
 
     public static function fromArray($responseData): InvoiceSetting
