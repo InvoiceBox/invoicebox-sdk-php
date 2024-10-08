@@ -349,7 +349,7 @@ class CreateOrderRequest
             'notificationUrl' => $this->notificationUrl,
             'successUrl' => $this->successUrl,
             'failUrl' => $this->failUrl,
-            'returnUr' => $this->returnUrl,
+            'returnUrl' => $this->returnUrl,
             'invoiceSetting' => $this->invoiceSetting ? $this->invoiceSetting->toArray() : null,
             'orderSetting' => $this->orderSetting ? $this->orderSetting->toArray() : null,
             'parentId' => $this->parentId,
