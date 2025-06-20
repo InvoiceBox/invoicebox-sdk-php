@@ -23,6 +23,12 @@ class HttpClient
     public function request(string $method, string $url, array $options = []): HttpResponse
     {
         $ch = curl_init();
+
+        if ($method === 'GET' && !empty($options['query'])) {
+            $queryString = http_build_query($options['query']);
+            $url .= (strpos($url, '?') === false) ? '?' . $queryString : '&' . $queryString;
+        }
+
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -30,22 +36,21 @@ class HttpClient
         if (isset($options['headers'])) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, self::returnHeaders($options['headers']));
         }
-        if (isset($options['query'])) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($options['query']));
-        }
-        if (isset($options['json'])) {
+
+        if ($method !== 'GET' && isset($options['json'])) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($options['json']));
         }
 
         $response = curl_exec($ch);
-        curl_close($ch);
 
         if ($response === false) {
-            $curl_code = curl_errno($ch);
-            $curl_message = curl_error($ch);
-            echo "Произошла ошибка. Код ошибки " . $curl_code . ", текст ошибки: " . $curl_message;
+            $errorCode = curl_errno($ch);
+            $errorMessage = curl_error($ch);
+            curl_close($ch);
+            throw new \RuntimeException("CURL error $errorCode: $errorMessage");
         }
 
+        curl_close($ch);
         return new HttpResponse($response);
     }
 
