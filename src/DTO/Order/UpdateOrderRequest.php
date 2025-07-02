@@ -2,6 +2,9 @@
 
 namespace Invoicebox\Sdk\DTO\Order;
 
+use Invoicebox\Sdk\DTO\Order\Customer\LegalCustomer;
+use Invoicebox\Sdk\DTO\Order\Customer\PrivateCustomer;
+
 class UpdateOrderRequest
 {
     private ?string $description = null;

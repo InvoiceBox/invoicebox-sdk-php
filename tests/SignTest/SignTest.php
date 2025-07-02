@@ -9,7 +9,7 @@ use Invoicebox\Sdk\DTO\NotificationResult;
 use Invoicebox\Sdk\DTO\Order\BasketItem;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
-use Invoicebox\Sdk\DTO\Order\LegalCustomer;
+use Invoicebox\Sdk\DTO\Order\Customer\LegalCustomer;
 use Invoicebox\Sdk\SignValidator;
 use Invoicebox\Sdk\Tests\InvoiceboxTestCase;
 

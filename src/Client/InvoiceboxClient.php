@@ -6,6 +6,9 @@ use Invoicebox\Sdk\DTO\CheckAuth\CheckAuthResponse;
 use Invoicebox\Sdk\DTO\Filter\Filter;
 use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
 use Invoicebox\Sdk\DTO\Order\CreateOrderResponse;
+use Invoicebox\Sdk\DTO\Order\CreateRefundOrderRequest;
+use Invoicebox\Sdk\DTO\Order\BasketItemsAvailableForRefund;
+use Invoicebox\Sdk\DTO\Order\RefundOrderResponse;
 use Invoicebox\Sdk\DTO\Order\UpdateOrderRequest;
 use Invoicebox\Sdk\Exception\ExceptionFactory;
 use Invoicebox\Sdk\Exception\GateException;
@@ -75,6 +78,20 @@ class InvoiceboxClient
         $responseData = $this->doDeleteRequest("/billing/api/order/order/$uuid");
 
         return CreateOrderResponse::fromArray($responseData);
+    }
+
+    public function findAvailableRefundBasketItems(string $uuid): BasketItemsAvailableForRefund
+    {
+        $responseData = $this->doGetRequest("/billing/api/order/order/$uuid/refund-basket-item");
+
+        return BasketItemsAvailableForRefund::fromArray($responseData);
+    }
+
+    public function createRefundOrder(CreateRefundOrderRequest $createRefundOrderRequest): array
+    {
+        $responseData = $this->doPostRequest("/billing/api/order/refund-order", $createRefundOrderRequest->toArray());
+
+        return RefundOrderResponse::fromArray($responseData);
     }
 
     /**
