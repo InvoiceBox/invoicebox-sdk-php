@@ -1,6 +1,6 @@
 <?php
 
-namespace Invoicebox\Sdk\DTO\Order;
+namespace Invoicebox\Sdk\DTO\Order\Customer;
 
 class LegalCustomer extends PrivateCustomer
 {

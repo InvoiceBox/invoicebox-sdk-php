@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "id": "017f038f-c78b-736d-dc00-8bce30bd0f9f",
+      "parentId": "01771534-196a-1105-839a-82422289d6d9",
+      "description": "Проездной билет",
+      "merchantOrderId": "1",
+      "merchantId": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "amount": 2790.67,
+      "vatAmount": 0,
+      "currencyId": "RUB",
+      "basketItems": [
+        {
+          "sku": "0123456789",
+          "name": "Black Edition",
+          "measure": "шт",
+          "measureCode": "796",
+          "quantity": 1,
+          "amount": 2790.67,
+          "amountWoVat": 2790.67,
+          "totalAmount": 2790.67,
+          "totalVatAmount": 0,
+          "vatCode": "VATNONE",
+          "type": "commodity",
+          "paymentType": "full_prepayment"
+        }
+      ],
+      "createdAt": "2022-02-16T17:23:48+00:00",
+      "status": "created"
+    }
+  ],
+  "extendedData": []
+}

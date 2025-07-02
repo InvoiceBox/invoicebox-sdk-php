@@ -3,6 +3,8 @@
 namespace Invoicebox\Sdk\DTO\Order;
 
 use DateTimeInterface;
+use Invoicebox\Sdk\DTO\Order\Customer\LegalCustomer;
+use Invoicebox\Sdk\DTO\Order\Customer\PrivateCustomer;
 
 class CreateOrderRequest
 {
