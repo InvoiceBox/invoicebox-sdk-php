@@ -2,6 +2,7 @@
 
 namespace Invoicebox\Sdk\DTO\Order;
 
+use Invoicebox\Sdk\DTO\Order\Customer\LegalCustomer;
 use Invoicebox\Sdk\Exception\InvalidArgument;
 
 class CreateOrderResponse extends CreateOrderRequest
