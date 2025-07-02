@@ -1,0 +1,19 @@
+{
+  "data":[
+    {
+      "sku": "0123456789",
+      "name": "Black Edition",
+      "measure": "шт",
+      "measureCode": "796",
+      "quantity": 1,
+      "amount": 2790.67,
+      "amountWoVat": 2790.67,
+      "totalAmount": 2790.67,
+      "totalVatAmount": 0,
+      "vatCode": "VATNONE",
+      "type": "commodity",
+      "paymentType": "full_prepayment"
+    }
+  ],
+  "extendedData": []
+}

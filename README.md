@@ -49,14 +49,7 @@ require __DIR__ . '/vendor/autoload.php';
 ## Пример использования
 
 ```php
-use Invoicebox\Sdk\Client\InvoiceboxClient;
-use Invoicebox\Sdk\DTO\Enum\BasketItemType;
-use Invoicebox\Sdk\DTO\Enum\PaymentType;
-use Invoicebox\Sdk\DTO\Enum\VatCode;
-use Invoicebox\Sdk\DTO\Order\BasketItem;
-use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;
-use Invoicebox\Sdk\DTO\Order\LegalCustomer;
-use Symfony\Component\HttpClient\HttpClient;
+use Invoicebox\Sdk\Client\InvoiceboxClient;use Invoicebox\Sdk\DTO\Enum\BasketItemType;use Invoicebox\Sdk\DTO\Enum\PaymentType;use Invoicebox\Sdk\DTO\Enum\VatCode;use Invoicebox\Sdk\DTO\Order\BasketItem;use Invoicebox\Sdk\DTO\Order\CreateOrderRequest;use Invoicebox\Sdk\DTO\Order\Customer\LegalCustomer;use Symfony\Component\HttpClient\HttpClient;
 
 /**
  * Создание клиента, с ключем авторизации
