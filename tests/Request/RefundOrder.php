@@ -18,7 +18,7 @@ class RefundOrder extends InvoiceboxTestCase
     {
         $mockClient = $this->createMockClient('mock/success-get-basket-response.json');
 
-        $response = $mockClient->getItemsAvailableForRefund('017f038f-c78b-736d-dc00-8bce30bd0f9f');
+        $response = $mockClient->findAvailableRefundBasketItems('017f038f-c78b-736d-dc00-8bce30bd0f9f');
 
 
         $this->assertNotNull($response->getBasketItems());
@@ -58,6 +58,10 @@ class RefundOrder extends InvoiceboxTestCase
 
         $response = $mockClient->createRefundOrder($refundRequest);
 
-        $this->assertNotNull($response[0]->getBasketItems());
+        $firstRefund = $response[0];
+
+        $this->assertEquals('01771534-196a-1105-839a-82422289d6d9', $firstRefund->getParentId());
+        $this->assertNotEmpty($firstRefund->getBasketItems());
+
     }
 }
