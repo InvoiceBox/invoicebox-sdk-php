@@ -4,19 +4,19 @@ namespace Invoicebox\Sdk\DTO\Order;
 
 class CreateRefundOrderRequest
 {
-    private string $parentId;
+    protected string $parentId;
 
-    private string $merchantOrderId;
+    protected string $merchantOrderId;
 
-    private float $amount;
+    protected float $amount;
 
-    private float $vatAmount;
+    protected float $vatAmount;
 
-    private array $basketItems;
+    protected array $basketItems;
 
-    private string $description;
+    protected string $description;
 
-    private ?string $status;
+    protected ?string $status;
 
     public function __construct(
         string $parentId,
@@ -40,10 +40,10 @@ class CreateRefundOrderRequest
     {
         $basketItems = [];
         foreach ($this->basketItems as $basketItem) {
-            $basketItems[] = BasketItem::fromArray($basketItem);
+            $basketItems[] = $basketItem->toArray();
         }
 
-        return [
+        return array_filter([
             'parentId' => $this->parentId,
             'merchantOrderId' => $this->merchantOrderId,
             'amount' => $this->amount,
@@ -51,7 +51,7 @@ class CreateRefundOrderRequest
             'basketItems' => $basketItems,
             'description' => $this->description,
             'status' => $this->status,
-        ];
+        ], fn ($value) => !is_null($value));
     }
 
     public function getParentId(): string

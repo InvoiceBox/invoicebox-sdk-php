@@ -9,7 +9,7 @@ use Invoicebox\Sdk\DTO\Order\BasketItem;
 use Invoicebox\Sdk\DTO\Order\CreateRefundOrderRequest;
 use Invoicebox\Sdk\Tests\InvoiceboxTestCase;
 
-class RefundOrder extends InvoiceboxTestCase
+class RefundOrderTest extends InvoiceboxTestCase
 {
     /**
      * @test
@@ -31,20 +31,20 @@ class RefundOrder extends InvoiceboxTestCase
     {
         $mockClient = $this->createMockClient('mock/success-create-refund-order.json');
 
-        $basketItems[] = new BasketItem(
-            '12312',
+        $basketItems = new BasketItem(
+            '0123456789',
             'Black Edition',
             'шт.',
             '796',
             1.0,
-            1000.00,
-            1000,
-            1000.00,
-            0,
+            2790.67,
+            2790.67,
+            2790.67,
+            0.0,
             VatCode::VATNONE,
             BasketItemType::COMMODITY,
             PaymentType::FULL_PREPAYMENT,
-            new \DateTime('2025-10-30')
+
         );
 
         $refundRequest = new CreateRefundOrderRequest(
@@ -52,16 +52,14 @@ class RefundOrder extends InvoiceboxTestCase
             '017f038f-c78b-736d-dc00-8bce30bd0f9f',
             2790.67,
             0,
-            $basketItems,
+            [$basketItems],
             "Проездной билет"
         );
 
         $response = $mockClient->createRefundOrder($refundRequest);
 
-        $firstRefund = $response[0];
-
-        $this->assertEquals('01771534-196a-1105-839a-82422289d6d9', $firstRefund->getParentId());
-        $this->assertNotEmpty($firstRefund->getBasketItems());
+        $this->assertEquals('01771534-196a-1105-839a-82422289d6d9', $response->getParentId());
+        $this->assertNotEmpty($response->getBasketItems());
 
     }
 }
