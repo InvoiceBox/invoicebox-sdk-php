@@ -1,5 +1,5 @@
 {
-  "data": [
+  "data":
     {
       "id": "017f038f-c78b-736d-dc00-8bce30bd0f9f",
       "parentId": "01771534-196a-1105-839a-82422289d6d9",
@@ -28,6 +28,6 @@
       "createdAt": "2022-02-16T17:23:48+00:00",
       "status": "created"
     }
-  ],
+  ,
   "extendedData": []
 }
