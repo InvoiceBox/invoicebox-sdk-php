@@ -330,9 +330,9 @@ class CreateOrderRequest
 
     public function toArray(): array
     {
-        $baketItemsArray = [];
+        $basketItemsArray = [];
         foreach ($this->basketItems as $basketItem) {
-            $baketItemsArray[] = $basketItem->toArray();
+            $basketItemsArray[] = $basketItem->toArray();
         }
 
         return array_filter([
@@ -345,7 +345,7 @@ class CreateOrderRequest
             'currencyId' => $this->currencyId,
             'languageId' => $this->languageId,
             'expirationDate' => $this->expirationDate->format('Y-m-d\TH:i:sP'),
-            'basketItems' => $baketItemsArray,
+            'basketItems' => $basketItemsArray,
             'metaData' => $this->metaData,
             'customer' => $this->customer ? $this->customer->toArray() : null,
             'notificationUrl' => $this->notificationUrl,
