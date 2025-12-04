@@ -2,11 +2,13 @@
 
 namespace Invoicebox\Sdk\Client;
 
-readonly class InvoiceboxClientFactory
+class InvoiceboxClientFactory
 {
-    public function __construct(
-        private ?HttpClient $client = null
-    ) {
+    private ?HttpClient $client;
+
+    public function __construct(?HttpClient $client = null)
+    {
+        $this->client = $client;
     }
 
     public function createClient(

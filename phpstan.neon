@@ -1,5 +1,5 @@
 parameters:
-    phpVersion: 80400
+    phpVersion: 70400
     parallel:
         maximumNumberOfProcesses: 3
     paths:
