@@ -4,11 +4,10 @@ namespace Invoicebox\Sdk\Client;
 
 class InvoiceboxClientFactory
 {
-    private HttpClient $client;
+    private ?HttpClient $client;
 
-    public function __construct(
-        HttpClient $client
-    ) {
+    public function __construct(?HttpClient $client = null)
+    {
         $this->client = $client;
     }
 
@@ -17,11 +16,12 @@ class InvoiceboxClientFactory
         ?string $apiUrl = null,
         ?string $version = null
     ): InvoiceboxClient {
+        $client = $this->client ?? new HttpClient();
         return new InvoiceboxClient(
             $authKey,
             $version,
             $apiUrl,
-            $this->client,
+            $client,
         );
     }
 }
